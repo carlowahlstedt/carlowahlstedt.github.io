@@ -1,16 +1,13 @@
 ---
 layout: page
-title: About me
-subtitle: Why you'd want to go on a date with me
+title: About Me
+subtitle: Stuff that doesn't really matter
 ---
 
-My name is Inigo Montoya. I have the following qualities:
+## Bio
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+Carlo Wahlstedt is a Jesus Follower, family man, and technologist. The latter leading to a diverse interest in anything technology can affect. Name a technology and Carlo as tried it, has it on his list to try, or is going to add what you mention to his list. He loves macOS and tolerates Windows but loves the platform Microsoft provides. 
 
-What else do you need?
+At work he currently enjoys all things web, being involved in software architecture, and servers/networking when they will let him. He is also passionate about communication, learning, and teaching, which lead him to help start, Tech Talks, an internal monthly presentation program at his current company. It focuses on bringing the wealth of knowledge in the company to the forefront of as many employees as possible. More recently, his skillset has allowed him to assist the company on a DevOps journey where he has become fascinated with what it means and how it impacts companies. 
 
-### my history
-
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](http://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+He is also a remote worker, an assistant high school boys basketball coach, and non-profit board member. Books reviewed include: Learning Xamarin Studio, Full Stack Development with ASP .NET Core 3 and React 17
