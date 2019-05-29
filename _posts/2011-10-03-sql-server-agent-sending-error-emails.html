@@ -1,0 +1,17 @@
+---
+layout: post
+title: SQL Server Agent Sending Error Emails
+date: '2011-10-03T16:09:00.001-04:00'
+author: Carlo
+tags:
+- SQL
+- Email
+- SQL Server 2005
+- Agent
+modified_time: '2011-10-03T16:10:35.791-04:00'
+thumbnail: http://4.bp.blogspot.com/-tVafoRfu3mo/Tonq7xuB3AI/AAAAAAABQKg/dk_14wJNygo/s72-c/sql+server+agent.png
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-2151386437901265446
+blogger_orig_url: https://thewahlstedts.blogspot.com/2011/10/sql-server-agent-sending-error-emails.html
+---
+
+<div class="separator" style="clear: both; text-align: left;">I've been having an issue recently and I just decided to try to address it today. It was on a development server so I wasn't that concerned with it. My problem was that when errors were happening it wasn't sending out an email letting me know. I check the job to make sure that it was setup to email the error. It was. So then after a little searching I found that in the SQL Server Agent properties there's a setting to enable the mail profile. This wasn't enabled. Once I enabled it and restarted the agent all worked well! Easy fix!</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-tVafoRfu3mo/Tonq7xuB3AI/AAAAAAABQKg/dk_14wJNygo/s1600/sql+server+agent.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-tVafoRfu3mo/Tonq7xuB3AI/AAAAAAABQKg/dk_14wJNygo/s1600/sql+server+agent.png" /></a></div><br /><br />

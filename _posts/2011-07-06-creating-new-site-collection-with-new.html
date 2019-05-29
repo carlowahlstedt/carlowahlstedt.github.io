@@ -1,0 +1,17 @@
+---
+layout: post
+title: Creating a New Site Collection with a New Content Database in SharePoint 2010
+date: '2011-07-06T11:20:00.000-04:00'
+author: Carlo
+tags:
+- New Content Database
+- New Site Collection
+- '2010'
+- SharePoint
+modified_time: '2011-07-06T11:20:24.346-04:00'
+thumbnail: http://2.bp.blogspot.com/-B1XCCfNgLuY/ThR6QkZrehI/AAAAAAAA714/KddxlHEmWHs/s72-c/SiteCollection.png
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-8708431616615914044
+blogger_orig_url: https://thewahlstedts.blogspot.com/2011/07/creating-new-site-collection-with-new.html
+---
+
+Sometimes SharePoint overwhelms me and so I track some of the cool or hard stuff that I do and capture it here. This is once such instance. This morning we needed to create a new site collection where we wanted to house all of our team sites. The purpose of this was to put the site collection in a different database. Sounds simple enough right? Problem is you can't just create or even select a new content database when creating a new site collection.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-B1XCCfNgLuY/ThR6QkZrehI/AAAAAAAA714/KddxlHEmWHs/s1600/SiteCollection.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://2.bp.blogspot.com/-B1XCCfNgLuY/ThR6QkZrehI/AAAAAAAA714/KddxlHEmWHs/s640/SiteCollection.png" width="632" /></a></div><br />So off to PowerShell we go. Now we need to create the content database first and here are a couple of ways to do this. One is in Central Administration go to Application Management &gt; Manage content databases &gt; Add a content database. The other is, you guessed it, PowerShell. I chose the GUI, mostly because I found it first. If you want to do it in PowerShell use the <a href="http://technet.microsoft.com/en-us/library/ff607572.aspx">New-SPContentDatabase command</a>. It should look something like this:<br /><br /><span class="Apple-style-span" style="color: #38761d;">New-SPContentDatabase "NameOfDatabase" -DatabaseServer "NameOfDatabaseServer" -WebApplication http://SharePointServerName</span><br /><br />Once you've gotten that created then you'll have to use the <a href="http://technet.microsoft.com/en-us/library/ff607937.aspx">PowerShell command New-SPSite</a> to create the new site collection. It should look something like this:<br /><br /><span class="Apple-style-span" style="color: #38761d;">New-SPSite http://SharePointServerName -OwnerAlias domian\username -Name "Site Collection Name" -Template "STS#0"</span><br /><br />Now, I'm assuming you're thinking what I was thinking. How does it know the content database to use? The answer is, I don't know but it seemed to know the one I created for it. However to be safe, one should probably add in the parameter ContentDatabase and tell it which one to use.

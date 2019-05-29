@@ -1,0 +1,15 @@
+---
+layout: post
+title: ".Net 4.5 Reflection API Changes"
+date: '2015-02-03T18:12:00.000-05:00'
+author: Carlo
+tags:
+- ".NET"
+- '4.5'
+- Reflection
+modified_time: '2015-02-03T18:12:29.577-05:00'
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-6914780109864049440
+blogger_orig_url: https://thewahlstedts.blogspot.com/2015/02/net-45-reflection-api-changes.html
+---
+
+<br /><blockquote class="twitter-tweet" lang="en">I'm a little behind on the game, but it looks like the .Net Reflection APIs changed in 4.5 <a href="http://t.co/7PYN1e3ksN">http://t.co/7PYN1e3ksN</a><br />— Carlo Wahlstedt (@carlowahlstedt) <a href="https://twitter.com/carlowahlstedt/status/560792142176858112">January 29, 2015</a></blockquote><script async="" charset="utf-8" src="//platform.twitter.com/widgets.js"></script> <br /><br />Thought I'd share a few examples of changes when converting to .Net 4.5. The pre-4.5 version is on top and the 4.5 version is on the bottom.<br /><br /><h3><a href="https://msdn.microsoft.com/en-us/library/system.reflection.runtimereflectionextensions.getruntimemethods(v=vs.110).aspx" target="_blank">GetRuntimeMethods</a></h3><pre class="brush:java"><span class="s1">typeof</span>(Extensions).GetMethod(<span class="s2">"methodName"</span>)<br /><br /><span class="s1">typeof</span>(<span class="s2">Extensions</span>).GetRuntimeMethods().Where(t =&gt; t.Name ==&nbsp;<span class="s3">"methodName"</span>).FirstOrDefault()<br /></pre><div class="p1"><br /></div><div class="p1"><h3><a href="https://msdn.microsoft.com/en-us/library/system.reflection.runtimereflectionextensions.getruntimeproperties%28v=vs.110%29.aspx" target="_blank">GetRuntimeProperties</a></h3></div><pre class="brush:java">item.GetType().GetMember("memberName");<br /><br />item.GetType().GetRuntimeProperties().Where(t =&gt; t.Name == "memberName");<br /></pre><div class="p1">and</div><pre class="brush:java">item.GetType().GetProperties();<br /><br />item.GetType().GetRuntimeProperties();<br /></pre><div class="p1"><br /></div><div class="p1"><h3><a href="https://msdn.microsoft.com/en-us/library/system.reflection.introspectionextensions.gettypeinfo%28v=vs.110%29.aspx" target="_blank">GetTypeInfo - Extension</a></h3>Make sure you add a using for System.Reflection</div><div class="p1"></div><pre class="brush:java">memberExpression.Member.DeclaringType.IsAssignableFrom(item.GetType())<br /><br />memberExpression.Member.DeclaringType.GetTypeInfo().IsAssignableFrom(item.GetType().GetTypeInfo())<br /></pre><div class="p1"><br /></div><div class="p1"><h3><a href="https://msdn.microsoft.com/en-us/library/hh194292(v=vs.110).aspx" target="_blank">GetCustomAttribute<t></t></a></h3></div><div class="p1"></div><pre class="brush:java">(CustomCreatedAttribute)<span class="s1">Attribute</span>.GetCustomAttribute(item.GetType(), <span class="s2">typeof</span>(CustomCreatedAttribute));<br /><br />item.GetType().GetTypeInfo().GetCustomAttribute&lt;CustomCreatedAttribute&gt;();<br /></pre><div class="p1"><br /></div>

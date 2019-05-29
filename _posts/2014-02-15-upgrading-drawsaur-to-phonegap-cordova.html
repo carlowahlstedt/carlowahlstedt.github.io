@@ -1,0 +1,18 @@
+---
+layout: post
+title: Upgrading Drawsaur to PhoneGap Cordova 3.3.0
+date: '2014-02-15T16:55:00.000-05:00'
+author: Carlo
+tags:
+- Cordova
+- image
+- PhoneGap
+- share
+- '3.3'
+- drawsaur
+modified_time: '2014-02-15T16:55:54.111-05:00'
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-3078853171655829389
+blogger_orig_url: https://thewahlstedts.blogspot.com/2014/02/upgrading-drawsaur-to-phonegap-cordova.html
+---
+
+I recently had a request to update one of the plugs used for saving images. Considering I hadn't worked on the project in 6 months or more I decided to accept the challenge.<br /><br />It turns out the challenge was more about upgrading the project to work with 3.3 than it was upgrading the plug. You can read the Cordova docs, but basically they've changed the way plug-ins work. You now define plug-ins in the <a href="https://github.com/carlowahlstedt/Drawsaur/blob/Cordova-3.3/Drawsaur/platforms/android/res/xml/config.xml" target="_blank">config.xml file</a>. In this situation, the ShareImage needed to be placed into this file like this:<br /><br /><pre class="brush:java">    feature name="ShareImage"<br />        param name="android-package" value="org.apache.cordova.ShareImage" /<br />    /feature<br /></pre><br /><br />You can see more about the setup of new 3.3 project on the <a href="https://github.com/carlowahlstedt/Drawsaur/tree/Cordova-3.3" target="_blank">new branch</a>.

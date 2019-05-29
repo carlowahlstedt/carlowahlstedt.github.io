@@ -1,0 +1,29 @@
+---
+layout: post
+title: Sharing Content with PhoneGap Plugin on Android
+date: '2013-01-01T22:42:00.000-05:00'
+author: Carlo
+tags:
+- sharing
+- share
+- drawsuar
+- Twitter
+- Android
+- HTML5
+- JavaScript
+- images
+- PhoneGap
+- plugin
+- gmail
+- upgrade
+- app
+- dropbox
+- github
+- instagram
+- java
+modified_time: '2013-01-01T22:42:35.181-05:00'
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-2056695491890098501
+blogger_orig_url: https://thewahlstedts.blogspot.com/2013/01/sharing-content-with-phonegap-plugin-on.html
+---
+
+If you've been following my blog, you'll know that I have been working on an <a href="https://play.google.com/store/apps/details?id=com.thewahlstedts.drawsaur" target="_blank">Android app called Drawsaur</a> using PhoneGap. I wanted to implement a way for users to share their drawings with other in the same way you share other content on Android. That lead me to&nbsp;<a href="https://github.com/phonegap/phonegap-plugins/tree/master/Android/Share" target="_blank">a plugin for sharing content</a>. The problem was that it did not quite work for me following the directions out of the box. However, I had <a href="http://thewahlstedts.blogspot.com/2012/12/upgrading-phonegap-plugin-for-saving.html" target="_blank">previously used a plugin</a> in my application. So I combined that with what was given to me to get it to work. I also had to extend the plugin because it was only written to share text and I, of course, wanted to share images.<br /><br />Here is the method I implemented to get the file to share. I seem to be having an issue with sharing the image to Google+ but everything else (I tested Dropbox, Twitter, Gmail, and Instagram) worked fine.<br /><br /><pre class="brush:java">private void doSendIntent(String fileName) {<br />    Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);<br />    sendIntent.setType("image/png");<br /><br />    sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Drawsaur");<br />    sendIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out my drawing I made with Drawsaur!");<br />    Uri uriFile = Uri.fromFile(new File(fileName));<br />    sendIntent.putExtra(android.content.Intent.EXTRA_STREAM, uriFile);<br />    sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);<br />    sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);<br />  <br />    this.cordova.startActivityForResult(this, Intent.createChooser(sendIntent, "Share Drawsaur Image Using"), 0);<br />}<br /></pre>

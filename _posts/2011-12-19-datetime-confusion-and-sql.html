@@ -1,0 +1,14 @@
+---
+layout: post
+title: DateTime Confusion and SQL
+date: '2011-12-19T09:48:00.001-05:00'
+author: Carlo
+tags:
+- SQL
+- DateTime
+modified_time: '2011-12-19T20:09:25.974-05:00'
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-3204309213167726564
+blogger_orig_url: https://thewahlstedts.blogspot.com/2011/12/datetime-confusion-and-sql.html
+---
+
+<div style="text-align: center;"><span style="background-color: #f9cb9c;"><b>&nbsp;That is not what I thought when I read the&nbsp;announcement.&nbsp;</b></span></div><br />Off the top of your head, If I asked you what the time would be in a datetime for midnight what would you say?<br /><blockquote class="tr_bq"><span style="background-color: #eeeeee;">12:00:00...not sure why I say that. It would make more sense as 00:00:00 but you said off the top of my head</span></blockquote>And the confusion begins. The question first came up because a user asked me to start and stop something. Here's what the user responded when I asked the question "What should I set the dates to be?":<br /><blockquote class="tr_bq"><span style="background-color: #eeeeee;">1/1/2012 12:01 AM</span><br /><span style="background-color: #eeeeee;">1/31/2012 12:00 PM</span></blockquote>Now, in hindsight, I could have asked a more specific question. However, from what I asked I took this to mean this is when it should start and end. From that I created the SQL dates:<br /><blockquote class="tr_bq"><span style="background-color: #eeeeee;">2012-01-01 00:00:00.000<br />2012-02-01 00:00:00.000 </span></blockquote>Now, my accomplice agreed with me that the dates given would translate to the dates I came up with. So, let me throw you another curve. I&nbsp;received&nbsp;an&nbsp;announcement&nbsp;which pertains to the dates. Here's what it read:<br /><blockquote class="tr_bq"><span style="background-color: #eeeeee;">12 midnight, Sunday, January 1, 2012, and close at 12 midnight, Tuesday, January 31, 2012</span></blockquote>I told my accomplice:<br /><blockquote class="tr_bq"><span style="background-color: #eeeeee;">I'm trying to determine if what they said, is the same as what I have, is the same as what I was told... </span></blockquote>He thought that based on the announcement:<br /><blockquote class="tr_bq"><span style="background-color: #eeeeee;">so the datetime should be 01/02/2012 00:00:01.000?...it looks like they want it to open first thing on Monday Jan 2nd and close on the end of the day on the 31th.</span></blockquote>I had to agree with him. However, it seems we've established that this can be a very confusing subject. I may not have what they said, but I have what I was told. I believe that what I was told is what they meant to say. Therefore everything is no longer confusing. Right?

@@ -1,0 +1,21 @@
+---
+layout: post
+title: PowerShell and SQL
+date: '2012-09-24T22:22:00.000-04:00'
+author: Carlo
+tags:
+- SQL
+- PowerShell
+- Scheduling
+- Subscription
+- Scheduled Task
+- SSRS Subscriptions
+- Windows
+- Reports
+- SSRS
+modified_time: '2012-09-24T22:22:34.558-04:00'
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-3522093778509470273
+blogger_orig_url: https://thewahlstedts.blogspot.com/2012/09/powershell-and-sql.html
+---
+
+I recently wanted to run some SQL on a regular basis, like you would do with SSRS and subscriptions. However, I didn't have an implementation of SSRS installed, a server to install it to, or a desire to install it on my local machine to simply get a report at a regular interval. So, I thought through other options and pretty quickly decided to try to use PowerShell and a scheduled task, outputting my results to HTML. I had already written the queries I wanted to use for the data, so my next step was to figure out how to do this in PowerShell. I was pretty quickly able to get a connection established to SQL using the queries now saved to SQL files.<br /><br /><pre class="brush:java">#First do Server<br />$dataSource = "Server"<br /><br /># Database name<br />$database = "DatabaseName"<br /><br /># Create a string variable with all our connection details<br />$connectionDetails = "Provider=sqloledb; Data Source=$dataSource; Initial Catalog=$database; Integrated Security=SSPI;"<br /><br /># Connect to the data source using the connection details and T-SQL command we provided above, and open the connection<br />$connection = New-Object System.Data.OleDb.OleDbConnection $connectionDetails<br />$connection.Open()<br /><br /># Get the results of our sql command into a DataSet object<br />$cmdTotal = [System.IO.File]::ReadAllText("C:\files\SQL\Total.sql")<br />$cmd = New-Object System.Data.OleDb.OleDbCommand $cmdTotal,$connection<br />$dataAdapter = New-Object System.Data.OleDb.OleDbDataAdapter $cmd<br />$dsTotalTime = New-Object System.Data.DataSet<br />$dataAdapter.Fill($dsTotalTime)<br /><div><br /><div><br /></div><br /><div><br /># Close the connection</div><br /><div><br />$connection.Close()</div><br /></div><br /></pre>Now I just needed to figure out how to get that dataset output to HTML, but I just wanted a chunk that I could insert it into a generic template. That's where the Fragment option came into play.<br /><br /><pre class="brush:java">$htmlTotal = $dsTotalTime.Tables | Select-Object -Expand Rows | ConvertTo-HTML "Column2","Column3" -Fragment<br /></pre><br />Once that piece was complete the rest was a little bit of formatting and logic. Oh, and the scheduling part. It wasn't difficult but it didn't work the first time either. I created a scheduled task using this batch file:<br /><br /><pre class="brush:java">powershell.exe "&amp; 'C:\files\powershell\reports.ps1'"<br /></pre><br />That's it. Hope this is useful for someone. You can <a href="https://dl.dropbox.com/u/11550166/SQL%20to%20HTML%20Reports.zip" target="_blank">download the files here</a>.<br /><script src="http://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlightLoader.js"></script><br />

@@ -1,0 +1,18 @@
+---
+layout: post
+title: 'Xamarin: Custom Commands'
+date: '2013-11-13T18:30:00.000-05:00'
+author: Carlo
+tags:
+- Xamarin.iOS
+- Custom Commands
+- OS X
+- Xamarin
+- Xamarin Studio
+modified_time: '2013-11-13T18:30:02.149-05:00'
+thumbnail: http://1.bp.blogspot.com/-qyKWxnztyM0/UoPrN45rnpI/AAAAAAACVdw/v5TXSIdXV-Y/s72-c/Screen+Shot+2013-11-13+at+4.11.53+PM.png
+blogger_id: tag:blogger.com,1999:blog-1115978604548657664.post-5418799277825191907
+blogger_orig_url: https://thewahlstedts.blogspot.com/2013/11/xamarin-custom-commands.html
+---
+
+<div class="separator" style="clear: both; text-align: left;">Today I was trying to add a custom command to a Xamarin.iOS project I have been working on. I wanted to run a script to automate some post build things when doing an Ad-Hoc deployment.</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: left;">Seemingly easy enough, the first step was to write and test the script. Done. Now to attach it to the custom command during post build. Also easy enough, putting the command in just like it is being called from the terminal. Even checking the "Run on external console" so the script would be visible that it ran. Xamarin references it as "After Execute" but that makes as much sense as "Post Build" Now to test it. Selected Build &gt; Rebuild All. Nothing...</div><div class="separator" style="clear: both; text-align: left;"><br /></div><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-qyKWxnztyM0/UoPrN45rnpI/AAAAAAACVdw/v5TXSIdXV-Y/s1600/Screen+Shot+2013-11-13+at+4.11.53+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-qyKWxnztyM0/UoPrN45rnpI/AAAAAAACVdw/v5TXSIdXV-Y/s1600/Screen+Shot+2013-11-13+at+4.11.53+PM.png" /></a></div><br /><br />What was I doing wrong? I took to the <a href="http://www.urbandictionary.com/define.php?term=interwebs" target="_blank">interwebs</a>, google, <a href="http://chat.xamarin.com/" target="_blank">Xamarin chat</a>, etc to find a solution. Nothing. Even had a good confirming conversation in xamarin chat that someone else had it work. What could it be? It would work once, but then the very next time, nothing. Then, I pressed the play button. It worked. Wait, hu? Try again, cause it had worked before but not on subsequent tries. It fired again.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-CNVHz6swm-A/UoPrN9vcTiI/AAAAAAACVds/IBOgy8p2aqs/s1600/Screen+Shot+2013-11-13+at+3.42.27+PM.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://2.bp.blogspot.com/-CNVHz6swm-A/UoPrN9vcTiI/AAAAAAACVds/IBOgy8p2aqs/s1600/Screen+Shot+2013-11-13+at+3.42.27+PM.png" /></a></div><br />Well, dang there it is. If you want the Custom Commands to fire it looks like you gotta press play. Who knew? Maybe I can make it fire up a movie after a successful IPA build to celebrate?
