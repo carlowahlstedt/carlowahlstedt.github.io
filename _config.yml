@@ -11,8 +11,6 @@ baseurl: ""
 #url: "http://username.github.io/projectname"
 #baseurl: "/projectname"
 
-# Of course don't forget to change the username and projectname to YOUR username and project
-
 # Name of website
 title: The Wahlstedts
 
@@ -31,7 +29,6 @@ navbar-links:
   Now: "http://deanattali.com"
 
 # Image to show in the navigation bar - image must be a square (width = height)
-# Remove this parameter if you don't want an image in the navbar
 avatar: "/img/avatar-icon.jpg"
 
 # If you want to have an image logo in the top-left corner instead of the title text,
@@ -253,5 +250,6 @@ prose:
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jemoji
 # Beautiful Jekyll / Dean Attali
 # 2fc73a3a967e97599c9763d05e564189
