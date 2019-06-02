@@ -262,6 +262,11 @@ docker stop site-con
 
 Whenever you make any changes to `_config.yml`, you must stop and re-start the server for the new config settings to take effect.
 
+Changes other than dynamic content require the container to be built again:
+    ```bash
+    docker build -t site "$PWD"
+    ```
+
 Disclaimer: I personally am NOT using local development so I don't know much about running Jekyll locally. If you follow this route, please don't ask me questions because unfortunately I honestly won't be able to help!
 
 ## FAQ and support
