@@ -2,7 +2,7 @@
 layout: post
 title: Remote Windows Server Event Log Access
 tags: [powershell, event log]
-image: /img/posts/ps-event-log.png
+image: https://upload.wikimedia.org/wikipedia/commons/a/af/PowerShell_Core_6.0_icon.png
 bigimg: /img/posts/ps-event-log.png
 ---
 
