@@ -5,15 +5,7 @@
 
 > *Copyright 2018 [Dean Attali](https://deanattali.com)*
 
-**Beautiful Jekyll** is a ready-to-use template to help you create an awesome website quickly. Perfect for personal sites, blogs, or simple project websites.  [Check out a demo](https://deanattali.com/beautiful-jekyll) of what you'll get after just two minutes.  You can also look at [my personal website](https://deanattali.com) to see it in use, or see examples of websites other people created using this theme [here](#showcased-users-success-stories).
-
-**If you enjoy this theme, please consider [supporting me](https://www.paypal.me/daattali/20) for developing and maintaining this template.**
-
-<p align="center">
-  <a href="https://www.paypal.me/daattali">
-    <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" />
-  </a>
-</p>
+**If you enjoy this theme, please consider [supporting](https://www.paypal.me/daattali/20) for developing and maintaining this template.**
 
 ### Table of contents
 
@@ -102,30 +94,6 @@ If you don't include YAML then your file will not use the template.
 
 Many personalization settings in `_config.yml`, such as setting your name and site's description, changing the background colour/image, setting your avatar to add a little image in the navigation bar, customizing the links in the menus, customizing what social media links to show in the footer, etc.
 
-### Allowing users to leave comments
-
-If you want to enable comments on your site, Beautiful Jekyll supports either the [Disqus](https://disqus.com/) comments plugin, [Facebook](https://developers.facebook.com/docs/plugins/comments) comments, [Staticman](https://staticman.net) or [JustComments](https://just-comments.com). If any of these are set in the configuration file, then all blog posts will have comments turned on by default. To turn off comments on a particular blog post, add `comments: false` to the YAML front matter. If you want to add comments on the bottom of a non-blog page, add `comments: true` to the YAML front matter.
-
-#### Disqus comments
-
-To use Disqus, simply sign up to [Disqus](https://disqus.com/) and add your Disqus shortname to the `disqus` parameter in the `_config.yml` file.
-
-#### Facebook comments
-
-To use Facebook comments, create a Facebook app using [Facebook developers](https://developers.facebook.com/docs/apps/register), and add the Facebook App ID to the `fb_comment_id` parameter in `_config.yml`.
-
-#### Staticman comments
-
-To use Staticman, you first need to invite `staticmanlab` as a collaborator to your repository (by going to your repository **Settings** page, navigate to the **Collaborators** tab, and add the username `staticmanlab`), and then accept the invitation by going to `https://staticman3.herokuapp.com/v3/connect/github/<username>/<repo-name>`. Lastly, fill in your `repository` and `branch` in the Staticman section of `_config.yml`.
-
-#### JustComments
-
-To use JustComments you first need to have an account. After you just need to copy the API key to the `just-comments` property in `_config.yml` file.
-
-### Adding Google Analytics to track page views
-
-Beautiful Jekyll lets you easily add Google Analytics to all your pages. This will let you track all sorts of information about visits to your website, such as how many times each page is viewed and where (geographically) your users come from.  To add Google Analytics, simply sign up to [Google Analytics](https://www.google.com/analytics/) to obtain your Google Tracking ID, and add this tracking ID to the `google_analytics` parameter in `_config.yml`.
-
 ### Sharing blog posts on social media
 
 By default, all blog posts will have buttons at the bottom of the post to allow people to share the current page on Twitter/Facebook/LinkedIn.  You can choose to enable/disable specific social media websites in the `_config.yml` file. You can also turn off the social media buttons on specific blog posts using `social-share: false` in the YAML front matter.
@@ -180,46 +148,6 @@ If you want to use this theme to create a website for a particular repository, i
 
 1. In the configuration file (`_config.yml`), you should set `baseurl` to be `/projectname` instead of `""`.
 2. Project Pages are served from a branch named `gh-pages`, and you should be generating all the website content on that branch. When you fork Beautiful Jekyll, you'll already have a `gh-pages` branch but you should delete it and generate it again from the `master` branch. The reason is that the `gh-pages` branch in its current form does not have the updated code of Beautiful Jekyll, so you need to create that branch from the `master` branch (which is where all my new features and work go into).
-
-## Showcased users (success stories!)
-
-To my huge surprise, Beautiful Jekyll has been used in over 500 websites in its first 6 months alone! Here is a hand-picked selection of some websites that use Beautiful Jekyll.
-
-Want your website featured here? [Contact me](https://deanattali.com/aboutme#contact) to let me know about your website.
-
-### Project/company websites
-
-| Website                                                                          | Description                                                |
-| :------------------------------------------------------------------------------- | :--------------------------------------------------------- |
-| [repidemicsconsortium.org/](https://www.repidemicsconsortium.org/)               | R Epidemics Consortium                                     |
-| [vaccineimpact.org](https://www.vaccineimpact.org/)                              | Vaccine Impact Modelling Consortium                        |
-| [derekogle.com/fishR](http://derekogle.com/fishR/)                               | Using R for Fisheries Analyses                             |
-| [bigdata.juju.solutions](http://bigdata.juju.solutions)                          | Creating Big Data solutions Juju Solutions                 |
-| [joecks.github.io/clipboard-actions](http://joecks.github.io/clipboard-actions/) | Clipboard Actions - an Android app                         |
-| [deanattali.com/shinyjs](http://deanattali.com/shinyjs/)                         | shinyjs - an R package                                     |
-| [blabel.github.io](http://blabel.github.io)                                      | Library for canonicalising blank node labels in RDF graphs |
-| [reactionic.github.io](http://reactionic.github.io)                              | Create iOS and Android apps with React and Ionic           |
-| [ja2-stracciatella.github.io](http://ja2-stracciatella.github.io)                | Jagged Alliance 2 Stracciatella                            |
-| [ddocent.com](http://ddocent.com/)                                               | RADSeq Bioinformatics and Beyond                           |
-| [guitarlessons.org](https://www.guitarlessons.org/)                              | Free online guitar lessons for all                         |
-| [terremotocentroitalia.info](https://www.terremotocentroitalia.info/)            | Information about the 2016 Italy earthquake                |
-
-
-### Personal websites
-
-| Website                                                       | Who               | What                                                     |
-| :------------------------------------------------------------ | :---------------- | :------------------------------------------------------- |
-| [deanattali.com](https://deanattali.com)                      | Dean Attali       | Creator of Beautiful Jekyll                              |
-| [ouzor.github.io](http://ouzor.github.io)                     | Juuso Parkkinen   | Data scientist                                           |
-| [derekogle.com](http://derekogle.com/)                        | Derek Ogle        | Professor of Mathematical Sciences and Natural Resources |
-| [melyanna.github.io](http://melyanna.github.io/)              | Melyanna          | Shows off her nice art                                   |
-| [chauff.github.io](http://chauff.github.io/)                  | Claudia Hauff     | Professor at Delft University of Technology              |
-| [kootenpv.github.io](http://kootenpv.github.io/)              | Pascal van Kooten | Data analytics                                           |
-| [sjackman.ca](http://sjackman.ca)                             | Shaun Jackman     | PhD candidate in bioinformatics                          |
-| [anudit.in](http://www.anudit.in/)                            | Anudit Verma      | Engineering student                                      |
-| [sharepointoscar.github.io](http://sharepointoscar.github.io) | Oscar Medina      | Independent Hacker                                       |
-| [ocram85.com](https://ocram85.com)                            | Marco Blessing    | A personal blog about PowerShell and automation          |
-| [khanna.cc](https://khanna.cc/)                               | Harry Khanna      | Law and software                                         |
 
 ## Advanced: Local development using Docker
 
