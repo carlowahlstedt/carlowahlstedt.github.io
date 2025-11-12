@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot Perception Test</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function DotPerceptionTest() {
+          const [dot1Visible, setDot1Visible] = useState(false);
+          const [dot2Visible, setDot2Visible] = useState(false);
+          const [isRunning, setIsRunning] = useState(false);
+          const [countdown, setCountdown] = useState(30);
+          const [timingDelay, setTimingDelay] = useState(0.4);
+          const [responses, setResponses] = useState({ noticed: 0, notNoticed: 0 });
+          const [showResult, setShowResult] = useState(false);
+          const intervalRef = useRef(null);
+          const countdownRef = useRef(null);
+
+          const showDots = () => {
+            setDot1Visible(false);
+            setDot2Visible(false);
+            setShowResult(false);
+
+            setTimeout(() => {
+              setDot1Visible(true);
+              
+              setTimeout(() => {
+                setDot2Visible(true);
+                
+                setTimeout(() => {
+                  setDot1Visible(false);
+                  setDot2Visible(false);
+                  setShowResult(true);
+                }, 2000);
+              }, timingDelay);
+            }, 100);
+          };
+
+          const startTest = () => {
+            setIsRunning(true);
+            setCountdown(30);
+            showDots();
+
+            countdownRef.current = setInterval(() => {
+              setCountdown(prev => {
+                if (prev <= 1) {
+                  return 30;
+                }
+                return prev - 1;
+              });
+            }, 1000);
+
+            intervalRef.current = setInterval(() => {
+              showDots();
+            }, 30000);
+          };
+
+          const stopTest = () => {
+            setIsRunning(false);
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            if (countdownRef.current) clearInterval(countdownRef.current);
+            setDot1Visible(false);
+            setDot2Visible(false);
+            setShowResult(false);
+            setCountdown(30);
+          };
+
+          const handleResponse = (noticed) => {
+            if (noticed) {
+              setResponses(prev => ({ ...prev, noticed: prev.noticed + 1 }));
+            } else {
+              setResponses(prev => ({ ...prev, notNoticed: prev.notNoticed + 1 }));
+            }
+            setShowResult(false);
+          };
+
+          const resetResponses = () => {
+            setResponses({ noticed: 0, notNoticed: 0 });
+          };
+
+          useEffect(() => {
+            return () => {
+              if (intervalRef.current) clearInterval(intervalRef.current);
+              if (countdownRef.current) clearInterval(countdownRef.current);
+            };
+          }, []);
+
+          return (
+            <div className="min-h-screen bg-gray-900 text-white p-8">
+              <div className="max-w-4xl mx-auto">
+                <h1 className="text-4xl font-bold mb-4">Dot Perception Test</h1>
+                <p className="text-gray-300 mb-8">
+                  Two dots will appear every 30 seconds with a {timingDelay}ms delay between them. 
+                  Can you notice the difference?
+                </p>
+
+                <div className="bg-gray-800 rounded-lg p-6 mb-8">
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium mb-2">
+                      Timing Delay: {timingDelay}ms
+                    </label>
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="100"
+                      step="0.1"
+                      value={timingDelay}
+                      onChange={(e) => setTimingDelay(parseFloat(e.target.value))}
+                      disabled={isRunning}
+                      className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between text-xs text-gray-400 mt-1">
+                      <span>0.1ms</span>
+                      <span>100ms</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    {!isRunning ? (
+                      <button
+                        onClick={startTest}
+                        className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition"
+                      >
+                        Start Test
+                      </button>
+                    ) : (
+                      <button
+                        onClick={stopTest}
+                        className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold transition"
+                      >
+                        Stop Test
+                      </button>
+                    )}
+                    
+                    <button
+                      onClick={resetResponses}
+                      className="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition"
+                    >
+                      Reset Results
+                    </button>
+                  </div>
+
+                  {isRunning && (
+                    <div className="mt-4 text-lg">
+                      Next dots in: <span className="font-bold text-blue-400">{countdown}s</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-gray-800 rounded-lg p-12 mb-8 relative" style={{ minHeight: '400px' }}>
+                  <div className="flex items-center justify-center h-full gap-32">
+                    <div
+                      className={`w-16 h-16 rounded-full transition-opacity duration-100 ${
+                        dot1Visible ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      style={{ backgroundColor: '#ef4444' }}
+                    />
+
+                    <div
+                      className={`w-16 h-16 rounded-full transition-opacity duration-100 ${
+                        dot2Visible ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      style={{ backgroundColor: '#3b82f6' }}
+                    />
+                  </div>
+
+                  {showResult && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-95">
+                      <div className="text-center">
+                        <p className="text-xl mb-6">Did you notice a timing difference?</p>
+                        <div className="flex gap-4">
+                          <button
+                            onClick={() => handleResponse(true)}
+                            className="px-8 py-4 bg-green-600 hover:bg-green-700 rounded-lg font-semibold text-lg transition"
+                          >
+                            Yes, I noticed
+                          </button>
+                          <button
+                            onClick={() => handleResponse(false)}
+                            className="px-8 py-4 bg-gray-600 hover:bg-gray-700 rounded-lg font-semibold text-lg transition"
+                          >
+                            No difference
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-gray-800 rounded-lg p-6">
+                  <h2 className="text-2xl font-bold mb-4">Results</h2>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-green-900 bg-opacity-30 p-4 rounded-lg">
+                      <div className="text-3xl font-bold text-green-400">{responses.noticed}</div>
+                      <div className="text-sm text-gray-300">Noticed Difference</div>
+                    </div>
+                    <div className="bg-gray-700 p-4 rounded-lg">
+                      <div className="text-3xl font-bold text-gray-300">{responses.notNoticed}</div>
+                      <div className="text-sm text-gray-300">No Difference</div>
+                    </div>
+                  </div>
+                  
+                  {(responses.noticed + responses.notNoticed) > 0 && (
+                    <div className="mt-4 text-center">
+                      <div className="text-lg">
+                        Detection Rate: {' '}
+                        <span className="font-bold text-blue-400">
+                          {((responses.noticed / (responses.noticed + responses.notNoticed)) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-8 text-sm text-gray-400">
+                  <p className="mb-2"><strong>Note:</strong> Human perception of timing differences varies greatly:</p>
+                  <ul className="list-disc list-inside space-y-1 ml-4">
+                    <li>Most screens refresh every 16ms (60Hz) or 8ms (120Hz)</li>
+                    <li>Human reaction time is typically 200-300ms</li>
+                    <li>Perception of simultaneity: events within ~20-40ms often feel simultaneous</li>
+                    <li>At 0.4ms, the delay is likely imperceptible, even though both dots appear</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        ReactDOM.render(<DotPerceptionTest />, document.getElementById('root'));
+    </script>
+</body>
+</html>
