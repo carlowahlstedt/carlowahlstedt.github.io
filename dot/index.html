@@ -23,26 +23,68 @@
           const [timingDelay, setTimingDelay] = useState(0.4);
           const [responses, setResponses] = useState({ noticed: 0, notNoticed: 0 });
           const [showResult, setShowResult] = useState(false);
+          const [dot1Color, setDot1Color] = useState('#ef4444');
+          const [dot2Color, setDot2Color] = useState('#3b82f6');
+          const [leftFirst, setLeftFirst] = useState(true);
           const intervalRef = useRef(null);
           const countdownRef = useRef(null);
+
+          const colors = [
+            '#ef4444', // red
+            '#3b82f6', // blue
+            '#10b981', // green
+            '#f59e0b', // orange
+            '#8b5cf6', // purple
+            '#ec4899', // pink
+            '#06b6d4', // cyan
+            '#f97316', // orange-red
+          ];
+
+          const getRandomColor = () => {
+            return colors[Math.floor(Math.random() * colors.length)];
+          };
 
           const showDots = () => {
             setDot1Visible(false);
             setDot2Visible(false);
             setShowResult(false);
 
+            // Randomize colors
+            const color1 = getRandomColor();
+            let color2 = getRandomColor();
+            // Ensure colors are different
+            while (color2 === color1) {
+              color2 = getRandomColor();
+            }
+            setDot1Color(color1);
+            setDot2Color(color2);
+
+            // Randomize which side appears first
+            const leftAppearsFrst = Math.random() < 0.5;
+            setLeftFirst(leftAppearsFrst);
+
             setTimeout(() => {
-              setDot1Visible(true);
-              
-              setTimeout(() => {
-                setDot2Visible(true);
-                
+              if (leftAppearsFrst) {
+                setDot1Visible(true);
                 setTimeout(() => {
-                  setDot1Visible(false);
-                  setDot2Visible(false);
-                  setShowResult(true);
-                }, 2000);
-              }, timingDelay);
+                  setDot2Visible(true);
+                  setTimeout(() => {
+                    setDot1Visible(false);
+                    setDot2Visible(false);
+                    setShowResult(true);
+                  }, 2000);
+                }, timingDelay);
+              } else {
+                setDot2Visible(true);
+                setTimeout(() => {
+                  setDot1Visible(true);
+                  setTimeout(() => {
+                    setDot1Visible(false);
+                    setDot2Visible(false);
+                    setShowResult(true);
+                  }, 2000);
+                }, timingDelay);
+              }
             }, 100);
           };
 
@@ -163,14 +205,14 @@
                       className={`w-16 h-16 rounded-full transition-opacity duration-100 ${
                         dot1Visible ? 'opacity-100' : 'opacity-0'
                       }`}
-                      style={{ backgroundColor: '#ef4444' }}
+                      style={{ backgroundColor: dot1Color }}
                     />
 
                     <div
                       className={`w-16 h-16 rounded-full transition-opacity duration-100 ${
                         dot2Visible ? 'opacity-100' : 'opacity-0'
                       }`}
-                      style={{ backgroundColor: '#3b82f6' }}
+                      style={{ backgroundColor: dot2Color }}
                     />
                   </div>
 
