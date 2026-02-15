@@ -64,6 +64,12 @@ var main = {
       fakeMenu.remove();
     }
 
+    // Initialize Bootstrap 5 tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
     // show the big header image
     main.initImgs();
   },
