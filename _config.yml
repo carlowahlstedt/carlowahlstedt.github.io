@@ -187,6 +187,7 @@ link-tags: true
 # Exclude these files from production site
 exclude:
   - CHANGELOG.md
+  - CLAUDE.md
   - CNAME
   - Dockerfile
   - Gemfile
