@@ -109,10 +109,18 @@ img {
   background-color: {{ site.navbar-col }};
   border-bottom: 1px solid #EAEAEA;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding-top: 0;
+  padding-bottom: 0;
   {% if site.navbar-img %}
   background-image: url({{ site.navbar-img }});
   background-attachment: fixed;
   {% endif %}
+}
+
+.navbar-custom .navbar-brand {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  line-height: 20px;
 }
 
 .navbar-custom .navbar-nav .nav-link,
