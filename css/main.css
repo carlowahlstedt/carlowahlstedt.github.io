@@ -280,9 +280,8 @@ img {
   .navbar-custom .navbar-nav .navlinks-children {
     position: absolute;
     right: 0;
-    padding-top: 4px;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     overflow: hidden;
   }
   .navbar-custom .navbar-nav .navlinks-container .navlinks-children a {
