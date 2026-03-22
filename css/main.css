@@ -130,8 +130,11 @@ img {
   letter-spacing: 1px;
 }
 @media only screen and (min-width: 768px) {
-  .navbar-custom .navbar-nav > li + li {
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
+  .navbar-custom .navbar-nav > li + li:before {
+    content: "|";
+    color: rgba(0, 0, 0, 0.2);
+    font-weight: normal;
+    padding: 0 5px;
   }
 }
 
@@ -246,14 +249,14 @@ img {
   color: {{ site.navbar-text-col }};
   text-decoration: none !important;
   border-width: 0;
-  font-weight: normal;
+  font-weight: 800;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 .navbar-custom .navbar-nav .navlinks-container .navlinks-children a:hover,
 .navbar-custom .navbar-nav .navlinks-container .navlinks-children a:focus {
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: #0090e0;
   color: {{ site.navbar-hover-col }};
 }
 @media only screen and (max-width: 767px) {
