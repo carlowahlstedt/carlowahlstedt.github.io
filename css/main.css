@@ -271,6 +271,7 @@ img {
   }
   .navbar-custom .navbar-nav .navlinks-children {
     position: absolute;
+    right: 0;
   }
   .navbar-custom .navbar-nav .navlinks-container .navlinks-children a {
     padding: 8px 16px;
