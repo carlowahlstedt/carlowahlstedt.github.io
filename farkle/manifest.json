@@ -3,7 +3,7 @@
   "short_name": "Farkle",
   "description": "Classic dice game scorekeeper",
   "start_url": "/",
-  "scope": "/",
+  "scope": "/farkle/",
   "display": "standalone",
   "background_color": "#1a0a00",
   "theme_color": "#92400e",
