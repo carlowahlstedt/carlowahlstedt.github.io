@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Farkle</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: linear-gradient(135deg, #1a0a00 0%, #2d1500 50%, #1a0a00 100%);
+    font-family: Georgia, serif;
+    color: #fde68a;
+    min-height: 100vh;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  input::placeholder { color: #4b2c0a; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #92400e; border-radius: 2px; }
+
+  @keyframes float {
+    from { transform: translateY(0px); }
+    to   { transform: translateY(-7px); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .float  { animation: float 2s ease-in-out infinite alternate; }
+  .pulse  { animation: pulse 1.2s ease-in-out infinite; }
+  .fadein { animation: fadeIn 0.35s ease-out both; }
+
+  .setup-wrap {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px;
+  }
+  .setup-card {
+    background: rgba(255,255,255,0.04);
+    border: 2px solid #92400e; border-radius: 18px;
+    padding: 40px 32px; width: 100%; max-width: 420px;
+    text-align: center; box-shadow: 0 0 60px rgba(245,158,11,0.15);
+  }
+  .dice-banner { font-size: 1.8rem; letter-spacing: 6px; margin-bottom: 10px; }
+  .game-title {
+    font-size: 3.4rem; font-weight: 900; color: #f59e0b;
+    letter-spacing: 10px; text-shadow: 0 0 30px rgba(245,158,11,0.5); margin-bottom: 4px;
+  }
+  .game-subtitle {
+    color: #92400e; font-size: 0.78rem; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 30px;
+  }
+  .player-list  { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .player-row   { display: flex; align-items: center; gap: 10px; }
+  .player-num   {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #92400e; color: #f59e0b;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: bold; flex-shrink: 0;
+  }
+  .name-input {
+    flex: 1; background: rgba(255,255,255,0.07);
+    border: 1px solid #92400e; border-radius: 8px;
+    padding: 11px 14px; color: #fde68a;
+    font-size: 1rem; font-family: Georgia, serif; outline: none; width: 100%;
+  }
+  .name-input:focus { border-color: #f59e0b; }
+  .remove-btn {
+    background: transparent; border: 1px solid #7f1d1d; color: #ef4444;
+    border-radius: 6px; width: 30px; height: 30px;
+    cursor: pointer; font-size: 0.75rem; flex-shrink: 0;
+  }
+  .add-btn {
+    background: transparent; border: 1px dashed #92400e; color: #92400e;
+    border-radius: 8px; padding: 9px; cursor: pointer; font-size: 0.85rem;
+    width: 100%; margin-bottom: 18px; font-family: Georgia, serif;
+  }
+  .start-btn {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    border: none; border-radius: 12px; padding: 15px 32px;
+    color: #1a0a00; font-size: 1.1rem; font-weight: bold;
+    cursor: pointer; width: 100%; letter-spacing: 2px; font-family: Georgia, serif;
+    box-shadow: 0 4px 20px rgba(245,158,11,0.35); transition: transform 0.1s;
+  }
+  .start-btn:active { transform: scale(0.97); }
+  .start-btn:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+  .rule-hint { color: #78350f; font-size: 0.7rem; margin-top: 16px; }
+
+  .house-rules {
+    border: 1px solid #92400e; border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 18px; text-align: left;
+  }
+  .house-rules-title {
+    color: #92400e; font-size: 0.68rem; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px; text-align: center;
+  }
+  .toggle-row {
+    display: flex; align-items: flex-start; gap: 12px; cursor: pointer;
+  }
+  .toggle-track {
+    width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0;
+    position: relative; transition: background 0.2s; margin-top: 2px;
+  }
+  .toggle-track.on  { background: #d97706; }
+  .toggle-track.off { background: #3b1f0a; border: 1px solid #92400e; }
+  .toggle-thumb {
+    width: 18px; height: 18px; border-radius: 50%; background: #fde68a;
+    position: absolute; top: 3px; transition: left 0.2s;
+  }
+  .toggle-track.on  .toggle-thumb { left: 21px; }
+  .toggle-track.off .toggle-thumb { left: 3px; }
+  .toggle-label { font-size: 0.82rem; color: #fde68a; line-height: 1.4; }
+  .toggle-sub   { font-size: 0.72rem; color: #78350f; margin-top: 3px; }
+
+  .rule-active-badge {
+    display: inline-block; font-size: 0.65rem; padding: 2px 8px;
+    border-radius: 10px; margin-left: 6px; vertical-align: middle;
+  }
+  .rule-active-badge.yes { background: rgba(217,119,6,0.2); color: #f59e0b; border: 1px solid #92400e; }
+  .rule-active-badge.no  { background: rgba(107,114,128,0.15); color: #6b7280; border: 1px solid #374151; }
+  .ref-table tr.clickable-row { cursor: pointer; transition: background 0.15s; }
+  .ref-table tr.clickable-row:hover td { background: rgba(245,158,11,0.08); }
+  .ref-table tr.clickable-row:active td { background: rgba(245,158,11,0.18); }
+  .ref-table td.pts-cell { position: relative; }
+  .add-hint { font-size: 0.6rem; color: #78350f; margin-left: 4px; }
+
+  .input-row {
+    display: flex; align-items: stretch; gap: 10px; margin-bottom: 14px;
+  }
+  .score-input {
+    flex: 1; min-width: 0;
+    background: rgba(255,255,255,0.07); border: 2px solid #92400e;
+    border-radius: 10px; padding: 14px; color: #f59e0b; font-size: 1.7rem;
+    font-family: Georgia, serif; text-align: center; outline: none;
+    letter-spacing: 2px; transition: border-color 0.2s;
+  }
+  .score-input:focus { border-color: #f59e0b; }
+  .total-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(245,158,11,0.06); border: 2px solid #92400e;
+    border-radius: 10px; padding: 10px 14px; min-width: 80px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .total-box:active { background: rgba(245,158,11,0.14); }
+  .total-box-label { font-size: 0.58rem; color: #78350f; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 3px; }
+  .total-box-val   { font-size: 1.2rem; font-weight: bold; color: #f59e0b; line-height: 1; }
+  .undo-btn {
+    width: 100%; background: transparent; border: 1px solid #92400e;
+    border-radius: 8px; padding: 9px; color: #92400e; cursor: pointer;
+    font-size: 0.8rem; font-family: Georgia, serif; letter-spacing: 1px;
+    margin-bottom: 12px; transition: background 0.15s;
+  }
+  .undo-btn:hover   { background: rgba(146,64,14,0.1); }
+  .undo-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .ref-note {
+    margin-top: 10px; padding: 8px 10px; border-radius: 6px;
+    font-size: 0.75rem; line-height: 1.5;
+    background: rgba(217,119,6,0.08); border: 1px solid rgba(146,64,14,0.5);
+    color: #d97706;
+  }
+
+  .game-wrap { min-height: 100vh; padding: 16px; }
+  .game-layout {
+    max-width: 900px; margin: 0 auto;
+    display: grid; grid-template-columns: 260px 1fr; gap: 16px; align-items: start;
+  }
+  @media (max-width: 640px) {
+    .game-layout { grid-template-columns: 1fr; }
+    .scoreboard { position: static; }
+  }
+
+  .scoreboard {
+    background: rgba(255,255,255,0.04); border: 2px solid #92400e;
+    border-radius: 14px; padding: 18px;
+  }
+  .sb-title {
+    color: #92400e; font-size: 0.65rem; letter-spacing: 3px;
+    text-transform: uppercase; text-align: center; margin-bottom: 14px;
+  }
+  .score-row {
+    padding: 10px; border-radius: 8px; margin-bottom: 10px;
+    border: 1px solid transparent; transition: background 0.2s, border-color 0.2s;
+  }
+  .score-row.active { background: rgba(245,158,11,0.08); border-color: #92400e; }
+  .score-name-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .score-name {
+    font-size: 0.88rem; font-weight: bold; color: #fde68a;
+    max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .score-val { font-size: 1rem; color: #f59e0b; font-weight: bold; }
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .score-meta { display: flex; gap: 6px; flex-wrap: wrap; min-height: 16px; }
+  .badge-off  { font-size: 0.62rem; color: #78350f; }
+  .badge-fark { font-size: 0.7rem; }
+  .final-alert { text-align: center; color: #ef4444; font-size: 0.78rem; font-weight: bold; letter-spacing: 1px; margin-top: 8px; }
+  .new-game-btn {
+    margin-top: 16px; width: 100%; background: transparent;
+    border: 1px solid #7f1d1d; color: #78350f; border-radius: 8px;
+    padding: 8px; cursor: pointer; font-size: 0.75rem; font-family: Georgia, serif;
+  }
+
+  .turn-panel {
+    background: rgba(255,255,255,0.04); border: 2px solid #92400e;
+    border-radius: 14px; padding: 22px 20px;
+  }
+  .dice-row { text-align: center; font-size: 2rem; letter-spacing: 8px; margin-bottom: 18px; }
+  .turn-header { text-align: center; margin-bottom: 18px; }
+  .turn-label { display: block; color: #78350f; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
+  .turn-name  { display: block; font-size: 1.9rem; font-weight: bold; color: #f59e0b; margin-bottom: 4px; }
+  .turn-score { display: block; font-size: 1.05rem; color: #fde68a; }
+  .not-on-board {
+    display: inline-block; margin-top: 6px; background: #7f1d1d; color: #fca5a5;
+    font-size: 0.7rem; padding: 3px 12px; border-radius: 20px; letter-spacing: 0.5px;
+  }
+  .error-msg {
+    background: rgba(239,68,68,0.12); border: 1px solid #7f1d1d; border-radius: 8px;
+    color: #fca5a5; padding: 10px; font-size: 0.85rem; text-align: center; margin-bottom: 14px;
+  }
+  .input-label {
+    display: block; color: #92400e; font-size: 0.68rem;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .score-input {
+    width: 100%; background: rgba(255,255,255,0.07); border: 2px solid #92400e;
+    border-radius: 10px; padding: 14px; color: #f59e0b; font-size: 1.7rem;
+    font-family: Georgia, serif; text-align: center; outline: none;
+    letter-spacing: 2px; margin-bottom: 14px; transition: border-color 0.2s;
+  }
+  .score-input:focus { border-color: #f59e0b; }
+  .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .bank-btn {
+    background: linear-gradient(135deg, #065f46, #059669);
+    border: none; border-radius: 10px; padding: 15px; color: #ecfdf5;
+    font-size: 1rem; font-weight: bold; cursor: pointer; font-family: Georgia, serif;
+    letter-spacing: 1px; box-shadow: 0 4px 15px rgba(5,150,105,0.25); transition: transform 0.1s;
+  }
+  .bank-btn:active { transform: scale(0.96); }
+  .farkle-btn {
+    background: linear-gradient(135deg, #7f1d1d, #dc2626);
+    border: none; border-radius: 10px; padding: 15px; color: #fff;
+    font-size: 1rem; font-weight: bold; cursor: pointer; font-family: Georgia, serif;
+    letter-spacing: 1px; box-shadow: 0 4px 15px rgba(220,38,38,0.25); transition: transform 0.1s;
+  }
+  .farkle-btn:active { transform: scale(0.96); }
+  .farkle-warn { text-align: center; color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; }
+
+  .ref-toggle {
+    width: 100%; background: transparent; border: 1px solid #92400e; border-radius: 8px;
+    color: #92400e; padding: 8px 14px; cursor: pointer; font-size: 0.75rem;
+    font-family: Georgia, serif; letter-spacing: 1px; text-align: left; margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .ref-panel {
+    background: rgba(0,0,0,0.25); border: 1px solid #92400e;
+    border-radius: 10px; padding: 14px; margin-bottom: 12px;
+  }
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .ref-table th {
+    color: #78350f; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase;
+    text-align: left; padding: 0 0 8px; border-bottom: 1px solid rgba(146,64,14,0.4);
+  }
+  .ref-table th:last-child { text-align: right; }
+  .ref-table td { padding: 5px 0; color: #d97706; border-bottom: 1px solid rgba(146,64,14,0.15); }
+  .ref-table td:last-child { text-align: right; color: #f59e0b; font-weight: bold; }
+  .ref-table tr:last-child td { border-bottom: none; }
+
+  .log-wrap {
+    background: rgba(0,0,0,0.3); border-radius: 10px;
+    padding: 12px 14px; max-height: 190px; overflow-y: auto;
+  }
+  .log-title { color: #78350f; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .log-empty { color: #4b2c0a; font-size: 0.8rem; text-align: center; padding: 8px 0; }
+  .log-entry { font-size: 0.82rem; color: #d97706; padding: 4px 0; border-bottom: 1px solid rgba(146,64,14,0.2); }
+
+  .win-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+  .win-card {
+    background: rgba(255,255,255,0.04); border: 2px solid #92400e; border-radius: 18px;
+    padding: 48px 36px; max-width: 440px; width: 100%; text-align: center;
+    box-shadow: 0 0 80px rgba(245,158,11,0.2);
+  }
+  .win-dice  { font-size: 4rem; display: block; margin-bottom: 8px; }
+  .win-label { font-size: 0.8rem; letter-spacing: 6px; color: #92400e; text-transform: uppercase; margin-bottom: 6px; }
+  .win-name  { font-size: 3rem; font-weight: bold; color: #f59e0b; text-shadow: 0 0 40px rgba(245,158,11,0.5); margin-bottom: 4px; }
+  .win-score { font-size: 1.2rem; color: #fde68a; margin-bottom: 28px; }
+  .final-scores { margin-bottom: 26px; display: flex; flex-direction: column; gap: 8px; }
+  .final-row {
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+    border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid transparent;
+  }
+  .final-row.winner-row { background: rgba(245,158,11,0.1); border-color: #92400e; }
+  .final-place { color: #78350f; font-size: 0.8rem; width: 20px; }
+  .final-name  { flex: 1; color: #fde68a; text-align: left; }
+  .final-pts   { color: #f59e0b; font-weight: bold; }
+
+  .share-btn {
+    width: 100%; background: transparent;
+    border: 1px solid #92400e; border-radius: 12px;
+    padding: 13px 32px; color: #92400e;
+    font-size: 1rem; cursor: pointer; margin-top: 10px;
+    font-family: Georgia, serif; letter-spacing: 1px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .share-btn:hover { background: rgba(146,64,14,0.15); color: #f59e0b; }
+  .share-copied {
+    font-size: 0.75rem; color: #059669; margin-top: 8px;
+    text-align: center; letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const { useState, useRef, useEffect, createElement: h } = React;
+
+const WINNING  = 10000;
+const MIN_OPEN = 500;
+const FACES    = ["⚀","⚁","⚂","⚃","⚄","⚅"];
+const randDie  = () => FACES[Math.floor(Math.random() * 6)];
+const randDice = () => Array.from({ length: 6 }, randDie);
+
+const SCORING = [
+  ["Single 1",        100],
+  ["Single 5",         50],
+  ["Three 1s",       1000],
+  ["Three 2s",        200],
+  ["Three 3s",        300],
+  ["Three 4s",        400],
+  ["Three 5s",        500],
+  ["Three 6s",        600],
+  ["Four of a kind", 1000],
+  ["Five of a kind", 2000],
+  ["Six of a kind",  3000],
+  ["1-2-3-4-5-6",    1500],
+  ["Three pairs",    1500],
+];
+
+/* ── Dice Strip ─────────────────────────────────────────────── */
+function DiceStrip({ animKey }) {
+  const [dice, setDice] = useState(randDice());
+  const timer = useRef(null);
+  const stop  = useRef(null);
+
+  useEffect(function() {
+    clearInterval(timer.current);
+    clearTimeout(stop.current);
+    timer.current = setInterval(function() { setDice(randDice()); }, 80);
+    stop.current  = setTimeout(function() { clearInterval(timer.current); setDice(randDice()); }, 420);
+    return function() { clearInterval(timer.current); clearTimeout(stop.current); };
+  }, [animKey]);
+
+  return h("div", { className: "dice-row" },
+    dice.map(function(d, i) { return h("span", { key: i }, d); })
+  );
+}
+
+/* ── Scoring Reference ──────────────────────────────────────── */
+function ScoringRef({ fourOfAKindAsPairs, onAddScore }) {
+
+  return h("div", null,
+    h("div", { className: "ref-toggle", style: { cursor: "default" } },
+      h("span", null, "📋 Scoring Reference — tap row to add")
+    ),
+    h("div", { className: "ref-panel" },
+      h("table", { className: "ref-table" },
+        h("thead", null,
+          h("tr", null, h("th", null, "Combination"), h("th", null, "Points"))
+        ),
+        h("tbody", null,
+          SCORING.map(function(row) {
+            var isAffected = row[0] === "Four of a kind" || row[0] === "Three pairs";
+            return h("tr", { key: row[0], className: "clickable-row",
+              onClick: function() { onAddScore(row[1]); }
+            },
+              h("td", null, row[0],
+                isAffected
+                  ? h("span", { className: "rule-active-badge " + (fourOfAKindAsPairs ? "yes" : "no") },
+                      fourOfAKindAsPairs ? "house rule" : "standard"
+                    )
+                  : null
+              ),
+              h("td", { className: "pts-cell" },
+                row[1].toLocaleString(),
+                h("span", { className: "add-hint" }, "+ add")
+              )
+            );
+          })
+        )
+      ),
+      h("div", { className: "ref-note" },
+        fourOfAKindAsPairs
+          ? "🏠 House rule ON — four of a kind + a pair (e.g. 2-2-2-2-5-5) may be scored as three pairs (1,500) instead of four of a kind (1,000). Always take the higher value."
+          : "📖 Standard rules — score the highest single valid combination. Four of a kind + a pair scores as four of a kind (1,000) only."
+      )
+    )
+  );
+}
+
+/* ── Setup ──────────────────────────────────────────────────── */
+function Setup({ onStart }) {
+  const [names, setNames] = useState(["", ""]);
+  const [fourOfAKindAsPairs, setFourOfAKindAsPairs] = useState(false);
+
+  function update(i, v) { var n = names.slice(); n[i] = v; setNames(n); }
+  function add()        { if (names.length < 6) setNames(names.concat([""])); }
+  function remove(i)    { if (names.length > 2) setNames(names.filter(function(_, j) { return j !== i; })); }
+  var ready = names.every(function(n) { return n.trim().length > 0; });
+  function start()      { if (ready) onStart(names.map(function(n) { return n.trim(); }), fourOfAKindAsPairs); }
+
+  return h("div", { className: "setup-wrap" },
+    h("div", { className: "setup-card fadein" },
+      h("div", { className: "dice-banner" },
+        ["⚅","⚂","⚄","⚁","⚃","⚀"].map(function(d, i) {
+          return h("span", { key: i, className: "float", style: { animationDelay: (i * 0.12) + "s" } }, d);
+        })
+      ),
+      h("div", { className: "game-title" }, "FARKLE"),
+      h("div", { className: "game-subtitle" }, "Classic Dice Scorekeeper"),
+      h("div", { className: "player-list" },
+        names.map(function(name, i) {
+          return h("div", { key: i, className: "player-row" },
+            h("div", { className: "player-num" }, i + 1),
+            h("input", {
+              className: "name-input",
+              placeholder: "Player " + (i + 1),
+              value: name,
+              maxLength: 16,
+              onChange: function(e) { update(i, e.target.value); },
+              onKeyDown: function(e) { if (e.key === "Enter") start(); }
+            }),
+            names.length > 2
+              ? h("button", { className: "remove-btn", onClick: function() { remove(i); } }, "✕")
+              : null
+          );
+        })
+      ),
+      names.length < 6 ? h("button", { className: "add-btn", onClick: add }, "+ Add Player") : null,
+      h("div", { className: "house-rules" },
+        h("div", { className: "house-rules-title" }, "House Rules"),
+        h("div", {
+          className: "toggle-row",
+          onClick: function() { setFourOfAKindAsPairs(function(v) { return !v; }); }
+        },
+          h("div", { className: "toggle-track " + (fourOfAKindAsPairs ? "on" : "off") },
+            h("div", { className: "toggle-thumb" })
+          ),
+          h("div", null,
+            h("div", { className: "toggle-label" }, "Four of a kind + pair = three pairs"),
+            h("div", { className: "toggle-sub" },
+              fourOfAKindAsPairs
+                ? "ON — e.g. 2-2-2-2-5-5 scores 1,500 (three pairs)"
+                : "OFF — e.g. 2-2-2-2-5-5 scores 1,000 (four of a kind)"
+            )
+          )
+        )
+      ),
+      h("button", { className: "start-btn", disabled: !ready, onClick: start }, "Roll the Dice"),
+      h("p", { className: "rule-hint" }, "First to 10,000 · Need 500 to open · 3 Farkles = −1,000")
+    )
+  );
+}
+
+/* ── Game ───────────────────────────────────────────────────── */
+function Game({ players, fourOfAKindAsPairs, onReset }) {
+  var count = players.length;
+  var [scores,    setScores]    = useState(Array(count).fill(0));
+  var [onBoard,   setOnBoard]   = useState(Array(count).fill(false));
+  var [farkles,   setFarkles]   = useState(Array(count).fill(0));
+  var [curIdx,    setCurIdx]    = useState(0);
+  var [pts,       setPts]       = useState("");
+  var [log,       setLog]       = useState([]);
+  var [error,     setError]     = useState("");
+  var [final,     setFinal]     = useState(false);
+  var [finalStart,setFinalStart]= useState(null);
+  var [winner,    setWinner]    = useState(null);
+  var [diceKey,   setDiceKey]   = useState(0);
+  var [history,   setHistory]   = useState([]);
+
+  function snapshot() {
+    return {
+      scores: scores.slice(), onBoard: onBoard.slice(), farkles: farkles.slice(),
+      curIdx: curIdx, pts: pts, log: log.slice(),
+      final: final, finalStart: finalStart
+    };
+  }
+
+  function pushHistory() {
+    setHistory(function(prev) { return prev.concat([snapshot()]).slice(-20); });
+  }
+
+  function handleUndo() {
+    setHistory(function(prev) {
+      if (prev.length === 0) return prev;
+      var last = prev[prev.length - 1];
+      setScores(last.scores); setOnBoard(last.onBoard); setFarkles(last.farkles);
+      setCurIdx(last.curIdx); setPts(last.pts); setLog(last.log);
+      setFinal(last.final); setFinalStart(last.finalStart);
+      setError(""); setWinner(null);
+      return prev.slice(0, -1);
+    });
+  }
+
+  function shake()   { setDiceKey(function(k) { return k + 1; }); }
+  function addLog(m) { setLog(function(prev) { return [m].concat(prev).slice(0, 50); }); }
+
+  function addScore(val) {
+    setPts(function(cur) {
+      var existing = parseInt(cur, 10);
+      return String((isNaN(existing) ? 0 : existing) + val);
+    });
+    setError("");
+  }
+
+  function endGame(s) {
+    var max = Math.max.apply(null, s), wi = -1;
+    for (var i = s.length - 1; i >= 0; i--) { if (s[i] === max) { wi = i; break; } }
+    setWinner(wi);
+  }
+
+  function next(ns, nb, nf) {
+    shake(); setPts(""); setError("");
+    var nextIdx = (curIdx + 1) % count;
+    if (!final) {
+      var triggered = ns.findIndex(function(s) { return s >= WINNING; });
+      if (triggered !== -1) {
+        setFinal(true); setFinalStart(triggered);
+        if (triggered === count - 1) { endGame(ns); return; }
+      }
+    } else {
+      // Skip any player whose deficit from the leader exceeds the entire winning
+      // threshold — they'd need more than 10,000 pts in a single turn to win.
+      var leaderScore = Math.max.apply(null, ns);
+      var logs = [];
+      while (nextIdx !== finalStart) {
+        var gap = leaderScore - ns[nextIdx];
+        if (gap > WINNING) {
+          logs.push("⏭ " + players[nextIdx] + " cannot catch up (" + ns[nextIdx].toLocaleString() + " pts) — eliminated");
+          nextIdx = (nextIdx + 1) % count;
+        } else {
+          break;
+        }
+      }
+      if (logs.length > 0) {
+        setLog(function(prev) { return logs.concat(prev).slice(0, 50); });
+      }
+      if (nextIdx === finalStart) { endGame(ns); return; }
+    }
+    setCurIdx(nextIdx);
+  }
+
+  function handleBank() {
+    var p = parseInt(pts, 10);
+    if (isNaN(p) || p <= 0) { setError("Enter a valid score first."); return; }
+    if (!onBoard[curIdx] && p < MIN_OPEN) {
+      setError("Need at least " + MIN_OPEN.toLocaleString() + " pts to get on the board!");
+      return;
+    }
+    pushHistory();
+    var ns = scores.slice(), nb = onBoard.slice(), nf = farkles.slice();
+    if (!nb[curIdx]) nb[curIdx] = true;
+    ns[curIdx] += p; nf[curIdx] = 0;
+    addLog("✅ " + players[curIdx] + " banked " + p.toLocaleString() + " → " + ns[curIdx].toLocaleString());
+    setScores(ns); setOnBoard(nb); setFarkles(nf);
+    next(ns, nb, nf);
+  }
+
+  function handleFarkle() {
+    pushHistory();
+    var nf = farkles.slice(), ns = scores.slice(), msg;
+    nf[curIdx] += 1;
+    if (nf[curIdx] >= 3) {
+      ns[curIdx] = Math.max(0, ns[curIdx] - 1000); nf[curIdx] = 0;
+      msg = "💀💀💀 " + players[curIdx] + " — 3 Farkles! −1,000 → " + ns[curIdx].toLocaleString();
+    } else {
+      msg = "💀 " + players[curIdx] + " Farkled! (" + nf[curIdx] + "/3)";
+    }
+    addLog(msg); setError("");
+    setScores(ns); setFarkles(nf);
+    next(ns, onBoard.slice(), nf);
+  }
+
+  if (winner !== null) return h(WinScreen, { players: players, scores: scores, winner: winner, onReset: onReset });
+
+  var farks = farkles[curIdx];
+
+  return h("div", { className: "game-wrap" },
+    h("div", { className: "game-layout" },
+
+      h("div", { className: "scoreboard" },
+        h("div", { className: "sb-title" }, "Scoreboard"),
+        players.map(function(name, i) {
+          var pct    = Math.min(100, (scores[i] / WINNING) * 100);
+          var active = i === curIdx;
+          return h("div", { key: i, className: "score-row" + (active ? " active" : "") },
+            h("div", { className: "score-name-row" },
+              h("span", { className: "score-name" }, (active ? "▶ " : "") + name),
+              h("span", { className: "score-val" }, scores[i].toLocaleString())
+            ),
+            h("div", { className: "progress-bar" },
+              h("div", { className: "progress-fill", style: { width: pct + "%", background: active ? "#f59e0b" : "#6b7280" } })
+            ),
+            h("div", { className: "score-meta" },
+              !onBoard[i] ? h("span", { className: "badge-off" }, "Off board") : null,
+              farkles[i] > 0 ? h("span", { className: "badge-fark" }, "💀".repeat(farkles[i])) : null
+            )
+          );
+        }),
+        final ? h("div", { className: "final-alert pulse" }, "⚠️ Final Round!") : null,
+        h("button", { className: "new-game-btn", onClick: onReset }, "↩ New Game")
+      ),
+
+      h("div", { className: "turn-panel fadein", key: curIdx },
+        h(DiceStrip, { animKey: diceKey }),
+        h("div", { className: "turn-header" },
+          h("span", { className: "turn-label" }, "Current Turn"),
+          h("span", { className: "turn-name" }, players[curIdx]),
+          h("span", { className: "turn-score" }, scores[curIdx].toLocaleString() + " pts"),
+          !onBoard[curIdx] ? h("span", { className: "not-on-board" }, "Need " + MIN_OPEN.toLocaleString() + " to open") : null
+        ),
+        error ? h("div", { className: "error-msg" }, error) : null,
+        h("label", { className: "input-label" }, "Points scored this turn"),
+        h("div", { className: "input-row" },
+          h("input", {
+            className: "score-input",
+            type: "number", min: "0", step: "50", placeholder: "0",
+            value: pts,
+            onChange: function(e) { setPts(e.target.value); setError(""); },
+            onKeyDown: function(e) { if (e.key === "Enter") handleBank(); }
+          }),
+          h("div", {
+            className: "total-box",
+            title: "Tap to clear",
+            onClick: function() { setPts(""); setError(""); }
+          },
+            h("span", { className: "total-box-label" }, "Total"),
+            h("span", { className: "total-box-val" },
+              (parseInt(pts, 10) > 0 ? parseInt(pts, 10) : 0).toLocaleString()
+            )
+          )
+        ),
+        h("div", { className: "action-row" },
+          h("button", { className: "bank-btn", onClick: handleBank }, "✅ Bank It"),
+          h("button", { className: "farkle-btn", onClick: handleFarkle }, "💀 Farkle!")
+        ),
+        h("button", {
+          className: "undo-btn",
+          disabled: history.length === 0,
+          onClick: handleUndo
+        }, "↩ Undo last action" + (history.length > 0 ? " (" + history.length + ")" : "")),
+        farks > 0 ? h("div", { className: "farkle-warn" },
+          "💀".repeat(farks) + " · " + (3 - farks) + " more Farkle" + (3 - farks !== 1 ? "s" : "") + " = −1,000"
+        ) : null,
+        h(ScoringRef, { fourOfAKindAsPairs: fourOfAKindAsPairs, onAddScore: addScore }),
+        h("div", { className: "log-wrap" },
+          h("div", { className: "log-title" }, "Turn Log"),
+          log.length === 0
+            ? h("div", { className: "log-empty" }, "No turns yet")
+            : log.map(function(e, i) {
+                return h("div", { key: i, className: "log-entry", style: { opacity: Math.max(0.3, 1 - i * 0.04) } }, e);
+              })
+        )
+      )
+    )
+  );
+}
+
+/* ── Win Screen ─────────────────────────────────────────────── */
+function WinScreen({ players, scores, winner, onReset }) {
+  var [copied, setCopied] = useState(false);
+
+  var sorted = players
+    .map(function(name, i) { return { name: name, score: scores[i], i: i }; })
+    .sort(function(a, b) { return b.score - a.score; });
+
+  function buildShareText() {
+    var lines = ["🎲 Farkle Results", ""];
+    sorted.forEach(function(p, i) {
+      var medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : (i + 1) + ".";
+      lines.push(medal + " " + p.name + " — " + p.score.toLocaleString() + " pts");
+    });
+    lines.push("");
+    lines.push("🏆 Winner: " + players[winner]);
+    return lines.join("\n");
+  }
+
+  function handleShare() {
+    var text = buildShareText();
+    if (navigator.share) {
+      navigator.share({ title: "Farkle Results", text: text }).catch(function() {});
+    } else {
+      navigator.clipboard.writeText(text).then(function() {
+        setCopied(true);
+        setTimeout(function() { setCopied(false); }, 2500);
+      }).catch(function() {
+        // fallback for older browsers
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        setCopied(true);
+        setTimeout(function() { setCopied(false); }, 2500);
+      });
+    }
+  }
+
+  return h("div", { className: "win-wrap" },
+    h("div", { className: "win-card fadein" },
+      h("span", { className: "win-dice float" }, "🎲"),
+      h("div", { className: "win-label" }, "Winner!"),
+      h("div", { className: "win-name" }, players[winner]),
+      h("div", { className: "win-score" }, scores[winner].toLocaleString() + " points"),
+      h("div", { className: "final-scores" },
+        sorted.map(function(p, i) {
+          return h("div", { key: p.i, className: "final-row" + (p.i === winner ? " winner-row" : "") },
+            h("span", { className: "final-place" }, i + 1),
+            h("span", { className: "final-name" }, p.name),
+            h("span", { className: "final-pts" }, p.score.toLocaleString())
+          );
+        })
+      ),
+      h("button", { className: "start-btn", onClick: onReset }, "Play Again"),
+      h("button", { className: "share-btn", onClick: handleShare },
+        navigator.share ? "📤 Share Results" : "📋 Copy Results"
+      ),
+      copied ? h("div", { className: "share-copied" }, "✓ Copied to clipboard!") : null
+    )
+  );
+}
+
+/* ── Root ───────────────────────────────────────────────────── */
+function App() {
+  var [gameConfig, setGameConfig] = useState(null);
+  return gameConfig
+    ? h(Game, { players: gameConfig.players, fourOfAKindAsPairs: gameConfig.fourOfAKindAsPairs, onReset: function() { setGameConfig(null); } })
+    : h(Setup, { onStart: function(players, fourOfAKindAsPairs) { setGameConfig({ players: players, fourOfAKindAsPairs: fourOfAKindAsPairs }); } });
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+</script>
+</body>
+</html>
