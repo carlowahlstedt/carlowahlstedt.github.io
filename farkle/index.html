@@ -4,6 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Farkle</title>
+<link rel="manifest" href="./manifest.json" />
+<meta name="theme-color" content="#92400e" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Farkle" />
+<link rel="apple-touch-icon" href="./icon-192.png" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <style>
@@ -270,7 +276,7 @@
     text-align: left; padding: 0 0 8px; border-bottom: 1px solid rgba(146,64,14,0.4);
   }
   .ref-table th:last-child { text-align: right; }
-  .ref-table td { padding: 5px 0; color: #d97706; border-bottom: 1px solid rgba(146,64,14,0.15); }
+  .ref-table td { padding: 11px 6px; color: #d97706; border-bottom: 1px solid rgba(146,64,14,0.15); }
   .ref-table td:last-child { text-align: right; color: #f59e0b; font-weight: bold; }
   .ref-table tr:last-child td { border-bottom: none; }
 
@@ -747,6 +753,14 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("./sw.js").catch(function(e) {
+      console.warn("SW registration failed:", e);
+    });
+  });
+}
 </script>
 </body>
 </html>
