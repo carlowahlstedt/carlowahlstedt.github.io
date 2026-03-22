@@ -134,7 +134,7 @@ img {
     content: "|";
     color: rgba(0, 0, 0, 0.3);
     font-weight: 800;
-    padding: 0 5px;
+    margin: 0 10px;
   }
 }
 
@@ -280,8 +280,8 @@ img {
   .navbar-custom .navbar-nav .navlinks-children {
     position: absolute;
     right: 0;
-    margin-top: 4px;
-    border-radius: 4px;
+    padding-top: 4px;
+    border-radius: 0 0 4px 4px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     overflow: hidden;
   }
