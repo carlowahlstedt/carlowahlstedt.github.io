@@ -22,10 +22,7 @@ description: A personal site
 # List of links in the navigation bar
 navbar-links:
   About Me: "aboutme"
-  Apps:
-    - Coffee Golf: "apps/coffee-golf"
-    - Dot Perception Test: "apps/dot"
-    - Farkle: "apps/farkle"
+  Apps: "apps"
   # Resources:
   #   - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
   #   - Learn markdown: "http://www.markdowntutorial.com/"
