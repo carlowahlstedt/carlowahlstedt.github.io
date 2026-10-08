@@ -1,6 +1,6 @@
 # Carlo Wahlstedt
 
-Personal blog and portfolio site at [thewahlstedts.com](https://thewahlstedts.com).
+Personal blog and portfolio site at [carlo.thewahlstedts.com](https://carlo.thewahlstedts.com).
 
 ## Tech Stack
 
