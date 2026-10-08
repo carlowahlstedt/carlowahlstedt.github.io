@@ -4,7 +4,7 @@ This file provides guidance for AI assistants working with this repository.
 
 ## Project Overview
 
-This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [thewahlstedts.com](https://thewahlstedts.com). It is a **Jekyll static site** deployed via **GitHub Pages**, built on the [Beautiful Jekyll](https://github.com/daattali/beautiful-jekyll) theme.
+This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [carlo.thewahlstedts.com](https://carlo.thewahlstedts.com). It is a **Jekyll static site** deployed via **GitHub Pages**, built on the [Beautiful Jekyll](https://github.com/daattali/beautiful-jekyll) theme.
 
 ## Repository Structure
 
@@ -36,7 +36,7 @@ This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [thewah
 ├── Gemfile                # Ruby dependencies (github-pages v193)
 ├── Dockerfile             # Docker setup for local development
 ├── staticman.yml          # Staticman comment system config
-└── CNAME                  # Custom domain: thewahlstedts.com
+└── CNAME                  # Custom domain: carlo.thewahlstedts.com
 ```
 
 ## Tech Stack
@@ -73,7 +73,7 @@ The site runs at `http://localhost:4000` with live reload on file changes.
 
 | Setting | Value |
 |---------|-------|
-| `url` | `https://thewahlstedts.com` |
+| `url` | `https://carlo.thewahlstedts.com` |
 | `title` | `Carlo Wahlstedt` |
 | `timezone` | `America/Vancouver` |
 | `permalink` | `/:year-:month-:day-:title/` |
