@@ -33,7 +33,7 @@ This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [carlo.
 ├── tags.html              # Tag index page
 ├── 404.html               # Custom 404 page
 ├── feed.xml               # RSS feed (Liquid-generated)
-├── Gemfile                # Ruby dependencies (github-pages v193)
+├── Gemfile                # Ruby dependencies (github-pages v232)
 ├── Dockerfile             # Docker setup for local development
 ├── staticman.yml          # Staticman comment system config
 └── CNAME                  # Custom domain: carlo.thewahlstedts.com
@@ -41,7 +41,7 @@ This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [carlo.
 
 ## Tech Stack
 
-- **Static site generator**: Jekyll 3.7.4 (via `github-pages` gem v193)
+- **Static site generator**: Jekyll 3.10.0 (via `github-pages` gem v232; requires Ruby < 4.0)
 - **CSS framework**: Bootstrap 3
 - **JavaScript**: jQuery 1.11.2
 - **Markdown**: kramdown with GFM input
