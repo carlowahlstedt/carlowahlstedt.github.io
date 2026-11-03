@@ -32,7 +32,7 @@ google-plus:
   icon: "fa-brands fa-google"
 
 email:
-  name: "Email me"
+  name: "Email"
   baseURL: "mailto:"
   icon: "fa-solid fa-envelope"
 

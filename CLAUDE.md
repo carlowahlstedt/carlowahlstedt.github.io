@@ -11,7 +11,8 @@ This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [carlo.
 ```
 ├── _config.yml            # Main Jekyll configuration (site settings, colors, plugins)
 ├── _data/                 # Data files
-│   ├── SocialNetworks.yml # Social media link definitions
+│   ├── apps.yml           # Apps shown on the homepage and /apps
+│   ├── SocialNetworks.yml # Social media link definitions (footer)
 │   └── ui-text.yml        # UI text/translations
 ├── _includes/             # Reusable HTML partials (nav, footer, head, analytics, comments)
 ├── _layouts/              # Page templates
@@ -21,13 +22,15 @@ This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [carlo.
 │   ├── post.html          # Blog post layout
 │   └── minimal.html       # Minimal layout (no nav/footer)
 ├── _posts/                # Blog posts (~51 posts, dating from 2011-present)
-├── css/                   # Stylesheets (Bootstrap 3, custom styles)
+├── css/                   # Stylesheets (Bootstrap 5, custom styles)
 │   └── main.css           # Primary custom stylesheet (uses Liquid variables)
-├── js/                    # JavaScript (jQuery 1.11.2, Bootstrap 3, custom)
-│   └── main.js            # Custom JS (navbar behavior, image carousel)
+├── js/                    # JavaScript (jQuery 3.7.1, Bootstrap 5 bundle, custom)
+│   └── main.js            # Custom JS (multi-level navbar menus)
 ├── img/                   # Images (avatar, post images, backgrounds)
-├── coffee-golf/           # Interactive coffee-golf project page
-├── dot/                   # Interactive dot perception test page
+├── apps/                  # Apps index page plus standalone apps (coffee-golf, dot, farkle)
+├── favicon.svg            # The carlowahlstedt logo (also used in the navbar and footer)
+├── favicon.ico            # 16/32/48 px fallback rendered from favicon.svg
+├── apple-touch-icon.png   # 180 px iOS icon rendered from favicon.svg
 ├── index.html             # Homepage with paginated post listing
 ├── aboutme.md             # About page
 ├── tags.html              # Tag index page
@@ -42,8 +45,9 @@ This is **Carlo Wahlstedt's personal blog and portfolio site** hosted at [carlo.
 ## Tech Stack
 
 - **Static site generator**: Jekyll 3.10.0 (via `github-pages` gem v232; requires Ruby < 4.0)
-- **CSS framework**: Bootstrap 3
-- **JavaScript**: jQuery 1.11.2
+- **CSS framework**: Bootstrap 5.3.3 (local copy in `css/` and `js/`)
+- **JavaScript**: jQuery 3.7.1 (local copy), vanilla JS in `js/main.js`
+- **Fonts**: JetBrains Mono (headings, nav, meta; the logo's typeface) and IBM Plex Sans (body), from Google Fonts
 - **Markdown**: kramdown with GFM input
 - **Syntax highlighting**: Rouge
 - **Plugins**: jekyll-paginate, jekyll-sitemap, jemoji
@@ -82,10 +86,13 @@ The site runs at `http://localhost:4000` with live reload on file changes.
 
 ### Color scheme (defined in `_config.yml`, applied via Liquid in `css/main.css`)
 
-- Navbar: `#00A5FF`
-- Links: `#FC5A20`
-- Hover: `#00A5FF`
-- Footer: `#F5F5F5`
+Taken from the carlowahlstedt logo (source SVG: Google Drive folder "carlowahlstedt logo"):
+
+- Brand / links / header band: indigo `#4338CA` (hover `#3730A3`)
+- Text, footer, code blocks: ink `#1E1B4B`
+- Accent: teal `#00B8D6` — decoration only (the underscore cursor); it is 2.4:1 on white, too low for text
+- Muted text: `#5B5A72`; tint (tag chips, inline code): `#EEF0FB`; borders: `#E4E4F0`
+- Dark mode: automatic via `prefers-color-scheme: dark`. The dark palette lives in the `@media (prefers-color-scheme: dark)` block at the top of `css/main.css`, which swaps the CSS variables (page `#12102B`, links `#A5B4FC`, since indigo links are unreadable on dark). Use the variables (`var(--link)`, `var(--page-bg)`, …), not hard-coded colors, in new CSS so both modes keep working
 
 ## Content Conventions
 
@@ -119,7 +126,8 @@ tags: [tag1, tag2]
 - Store in `img/` directory
 - Post-specific images go in `img/posts/`
 - Homepage images go in `img/home/`
-- Avatar image: `img/avatar-icon.jpg`
+- Avatar image: `img/avatar-icon.jpg` (only used as the fallback social share image)
+- Favicon / logo: `favicon.svg`; if the logo changes, re-render `favicon.ico` (16/32/48) and `apple-touch-icon.png` (180) from it
 
 ## File Conventions
 
@@ -154,14 +162,14 @@ tags: [tag1, tag2]
 
 ### Adding a new standalone page/project
 
-- Create a directory with an `index.html` (see `coffee-golf/` and `dot/` for examples)
+- Create a directory under `apps/` with an `index.html` (see `apps/coffee-golf/` and `apps/dot/`), then add an entry to `_data/apps.yml`
 - Or create a top-level `.md`/`.html` file with appropriate front matter
 
 ## Important Notes for AI Assistants
 
 - The `css/main.css` file uses Jekyll Liquid tags (`{{ site.variable }}`), so it is not valid standalone CSS — do not try to validate or lint it as plain CSS
 - Posts are HTML, not Markdown, due to historical Blogger import — follow this convention for consistency, or use Markdown for new posts if the author prefers
-- The site uses Bootstrap 3 (not 4 or 5) and jQuery 1.11.2 — do not introduce Bootstrap 4/5 or modern JS syntax that requires transpilation
+- The site uses Bootstrap 5.3.3 and jQuery 3.7.1, served locally — avoid JS syntax that requires transpilation
 - There is no build toolchain (no webpack, no npm) — keep changes simple and compatible with Jekyll's built-in processing
 - The `github-pages` gem pins Jekyll and plugin versions — do not upgrade gems without understanding GitHub Pages compatibility
 - When modifying templates, test with the Docker setup or `jekyll serve` to verify Liquid template rendering

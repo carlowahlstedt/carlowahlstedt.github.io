@@ -1,0 +1,4 @@
+<a class="app-card" href="{% if include.app.external %}{{ include.app.url }}{% else %}{{ include.app.url | prepend: site.baseurl }}{% endif %}"{% if include.app.external %} target="_blank" rel="noopener"{% endif %}>
+  <span class="app-card-name">{{ include.app.name }}{% if include.app.external %} <span aria-hidden="true">↗</span><span class="visually-hidden">(opens in a new tab)</span>{% endif %}</span>
+  <span class="app-card-desc">{{ include.app.description }}</span>
+</a>
