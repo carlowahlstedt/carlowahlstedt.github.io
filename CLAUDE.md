@@ -92,6 +92,7 @@ Taken from the carlowahlstedt logo (source SVG: Google Drive folder "carlowahlst
 - Text, footer, code blocks: ink `#1E1B4B`
 - Accent: teal `#00B8D6` — decoration only (the underscore cursor); it is 2.4:1 on white, too low for text
 - Muted text: `#5B5A72`; tint (tag chips, inline code): `#EEF0FB`; borders: `#E4E4F0`
+- Dark mode: automatic via `prefers-color-scheme: dark`. The dark palette lives in the `@media (prefers-color-scheme: dark)` block at the top of `css/main.css`, which swaps the CSS variables (page `#12102B`, links `#A5B4FC`, since indigo links are unreadable on dark). Use the variables (`var(--link)`, `var(--page-bg)`, …), not hard-coded colors, in new CSS so both modes keep working
 
 ## Content Conventions
 

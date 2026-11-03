@@ -9,16 +9,61 @@ layout: null
  */
 
 :root {
+  color-scheme: light;
   --brand: {{ site.brand-col }};
   --brand-hover: {{ site.hover-col }};
-  --ink: {{ site.ink-col }};
   --accent: {{ site.accent-col }};
-  --muted: {{ site.muted-col }};
-  --tint: {{ site.tint-col }};
-  --border: {{ site.border-col }};
+  --ink: {{ site.ink-col }};
   --body-text: #3B3A52;
+  --muted: {{ site.muted-col }};
+  --page-bg: {{ site.page-col }};
+  --nav-bg: {{ site.navbar-col }};
+  --nav-text: {{ site.navbar-text-col }};
+  --nav-hover: {{ site.navbar-hover-col }};
+  --link: {{ site.link-col }};
+  --link-hover: {{ site.hover-col }};
+  --card-bg: #FFFFFF;
+  --tint: {{ site.tint-col }};
+  --chip-text: {{ site.brand-col }};
+  --fill: {{ site.brand-col }};
+  --on-fill: #FFFFFF;
+  --border: {{ site.border-col }};
+  --code-bg: {{ site.ink-col }};
+  --code-inline: {{ site.hover-col }};
+  --footer-bg: {{ site.footer-col }};
+  --footer-text: {{ site.footer-text-col }};
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-sans: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/*
+ * Dark mode follows the visitor's system setting. Indigo links are only 2.3:1 on the
+ * dark background, so links and chips switch to light indigo (9.3:1). The indigo
+ * header band keeps white text, which works in both modes.
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --ink: #E6E7F5;
+    --body-text: #C9CBE6;
+    --muted: #A5A9D6;
+    --page-bg: #12102B;
+    --nav-bg: #12102B;
+    --nav-text: #E6E7F5;
+    --nav-hover: #A5B4FC;
+    --link: #A5B4FC;
+    --link-hover: #C7D2FE;
+    --card-bg: #1A1840;
+    --tint: #2A2660;
+    --chip-text: #C7D2FE;
+    --fill: #A5B4FC;
+    --on-fill: #12102B;
+    --border: #2E2A66;
+    --code-bg: #0B0A1C;
+    --code-inline: #C7D2FE;
+    --footer-bg: #0B0A1C;
+    --footer-text: #C7D2FE;
+  }
 }
 
 /* --- General --- */
@@ -28,7 +73,7 @@ body {
   font-size: 18px;
   line-height: 1.7;
   color: var(--ink);
-  background-color: {{ site.page-col }};
+  background-color: var(--page-bg);
   -webkit-font-smoothing: antialiased;
 }
 p {
@@ -41,12 +86,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 a {
-  color: {{ site.link-col }};
+  color: var(--link);
   text-underline-offset: 0.18em;
 }
 a:hover,
 a:focus {
-  color: {{ site.hover-col }};
+  color: var(--link-hover);
 }
 :focus-visible {
   outline: 3px solid var(--accent);
@@ -83,7 +128,7 @@ hr {
   z-index: 2000;
   padding: 10px 16px;
   border-radius: 8px;
-  background: var(--ink);
+  background: var(--brand);
   color: #FFFFFF;
   font-family: var(--font-mono);
 }
@@ -115,7 +160,7 @@ hr {
 /* --- Navbar --- */
 
 .navbar-custom {
-  background-color: {{ site.navbar-col }};
+  background-color: var(--nav-bg);
   border-bottom: 1px solid var(--border);
   padding: 12px 0;
 }
@@ -136,11 +181,11 @@ hr {
   font-weight: 700;
   font-size: 17px;
   letter-spacing: -0.01em;
-  color: {{ site.navbar-text-col }};
+  color: var(--nav-text);
 }
 .navbar-custom .navbar-brand:hover,
 .navbar-custom .navbar-brand:focus {
-  color: {{ site.navbar-hover-col }};
+  color: var(--nav-hover);
 }
 .navbar-custom .navbar-logo {
   display: block;
@@ -168,14 +213,14 @@ hr {
   font-family: var(--font-mono);
   font-weight: 500;
   font-size: 15px;
-  color: {{ site.navbar-text-col }};
+  color: var(--nav-text);
   text-decoration: none;
 }
 .navbar-custom .navbar-nav li a:hover,
 .navbar-custom .navbar-nav li a:focus,
 .navbar-custom .navbar-nav .navlinks-parent:hover,
 .navbar-custom .navbar-nav .navlinks-parent:focus {
-  color: {{ site.navbar-hover-col }};
+  color: var(--nav-hover);
   background: var(--tint);
 }
 
@@ -203,7 +248,7 @@ hr {
   .navbar-custom .navbar-nav .navlinks-children {
     position: absolute;
     right: 0;
-    background: #FFFFFF;
+    background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
     box-shadow: 0 8px 24px rgba(30, 27, 75, 0.12);
@@ -316,14 +361,14 @@ hr {
   padding: 22px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #FFFFFF;
+  background: var(--card-bg);
   color: var(--ink);
   text-decoration: none;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
 .app-card:hover,
 .app-card:focus {
-  border-color: var(--brand);
+  border-color: var(--link);
   box-shadow: 0 6px 20px rgba(67, 56, 202, 0.12);
   color: var(--ink);
 }
@@ -331,7 +376,7 @@ hr {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 17px;
-  color: var(--brand);
+  color: var(--link);
 }
 .app-card-desc {
   font-size: 15px;
@@ -368,7 +413,7 @@ hr {
 }
 .post-preview .post-title a:hover,
 .post-preview .post-title a:focus {
-  color: var(--brand);
+  color: var(--link);
 }
 .post-preview .post-subtitle {
   margin: 0 0 10px;
@@ -404,13 +449,13 @@ hr {
   padding: 4px 10px;
   border-radius: 6px;
   background: var(--tint);
-  color: var(--brand);
+  color: var(--chip-text);
   text-decoration: none;
 }
 .blog-tags a:hover,
 .blog-tags a:focus {
-  background: var(--brand);
-  color: #FFFFFF;
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .blog-tags-dark a,
 .blog-tags-dark span:not(.visually-hidden) {
@@ -444,7 +489,7 @@ hr {
 .pager li a {
   display: inline-block;
   padding: 12px 18px;
-  border: 1px solid var(--brand);
+  border: 1px solid var(--link);
   border-radius: 8px;
   font-family: var(--font-mono);
   font-weight: 500;
@@ -453,8 +498,8 @@ hr {
 }
 .pager li a:hover,
 .pager li a:focus {
-  background: var(--brand);
-  color: #FFFFFF;
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .blog-pager {
   border-top: 1px solid var(--border);
@@ -488,7 +533,7 @@ code {
   padding: 2px 6px;
   border-radius: 4px;
   background: var(--tint);
-  color: {{ site.hover-col }};
+  color: var(--code-inline);
   font-family: var(--font-mono);
   font-size: 0.85em;
 }
@@ -496,7 +541,7 @@ pre {
   margin: 0 0 1.4em;
   padding: 18px 20px;
   border-radius: 10px;
-  background: var(--ink);
+  background: var(--code-bg);
   color: #E0E3FF;
   font-family: var(--font-mono);
   font-size: 15px;
@@ -512,7 +557,7 @@ pre code {
 }
 /* Some imported Blogger posts set a light background inline on <pre>: keep their text dark. */
 pre[style*="background"] {
-  color: var(--ink);
+  color: #1E1B4B;
 }
 .highlight {
   margin: 0 0 1.4em;
@@ -626,13 +671,13 @@ table th {
   padding: 6px 12px;
   border-radius: 6px;
   background: var(--tint);
-  color: var(--brand);
+  color: var(--chip-text);
   text-decoration: none;
 }
 .tag-index a:hover,
 .tag-index a:focus {
-  background: var(--brand);
-  color: #FFFFFF;
+  background: var(--fill);
+  color: var(--on-fill);
 }
 #full-tags-list h2 {
   margin: 0 0 16px;
@@ -656,13 +701,13 @@ table th {
 
 .site-footer {
   margin-top: 64px;
-  background-color: {{ site.footer-col }};
-  color: {{ site.footer-text-col }};
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
   font-family: var(--font-mono);
   font-size: 14px;
 }
 .site-footer a {
-  color: {{ site.footer-link-col }};
+  color: var(--footer-text);
   text-decoration: none;
 }
 .site-footer a:hover,
@@ -709,7 +754,7 @@ table th {
 .site-footer .theme-by {
   padding-bottom: 32px;
   font-size: 12px;
-  color: {{ site.footer-text-col }};
+  color: var(--footer-text);
 }
 
 /* --- 404 and other default-layout pages --- */
@@ -722,5 +767,63 @@ table th {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+}
+
+/* --- Dark mode details (colors themselves are swapped in :root above) --- */
+
+@media (prefers-color-scheme: dark) {
+  /* Bootstrap's hamburger icon is dark gray; lighten it on the dark navbar. */
+  .navbar-custom .navbar-toggler-icon {
+    filter: invert(1) brightness(1.4);
+  }
+  /* Imported Blogger posts hard-code dark text colors and white backgrounds inline,
+     which would be unreadable on the dark page. Let the theme win inside post bodies. */
+  .blog-post [style*="color"] {
+    color: inherit !important;
+    background-color: transparent !important;
+  }
+  .blog-post pre[style*="background"] {
+    background-color: var(--code-bg) !important;
+    color: #E0E3FF !important;
+  }
+  .box-note { background: var(--tint); }
+  .box-warning { background: #3A3112; }
+  .box-error { background: #3D1C1C; }
+  .box-success { background: #15331F; }
+}
+
+/* Imported Blogger posts float fixed-width images and caption tables (400-670px).
+   On phones, stack them so they fit the column instead of scrolling sideways. */
+@media (max-width: 767.98px) {
+  .blog-post [style*="float"] {
+    float: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .blog-post .separator a {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  /* Blogger image-with-caption tables: fit the column. */
+  .blog-post table.tr-caption-container,
+  .blog-post table[style*="float"] {
+    width: 100% !important;
+    table-layout: fixed;
+  }
+  /* Data tables keep their columns and scroll inside their own box. */
+  .blog-post table:not(.tr-caption-container):not([style*="float"]) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .blog-post img,
+  .blog-post iframe,
+  .blog-post embed,
+  .blog-post object {
+    max-width: 100% !important;
+  }
+  .blog-post img {
+    height: auto !important;
   }
 }
