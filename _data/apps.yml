@@ -1,0 +1,18 @@
+# Apps listed on the homepage and on /apps.
+# url: site-relative paths start with "/", external links start with "https://".
+- name: "Coffee Golf"
+  url: "/apps/coffee-golf"
+  description: "A championship series tracker for coffee golf — rate and rank your rounds."
+
+- name: "Dot Perception Test"
+  url: "/apps/dot"
+  description: "An interactive test of dot perception and visual estimation."
+
+- name: "Farkle"
+  url: "/apps/farkle"
+  description: "A digital version of the classic dice game Farkle."
+
+- name: "STLP"
+  url: "https://stlp.thewahlstedts.com"
+  external: true
+  description: "A practice quiz app for the STLP Tech Bowl — covering devices, digital citizenship, innovation, and internet safety, just like the real Kentucky state championship event."

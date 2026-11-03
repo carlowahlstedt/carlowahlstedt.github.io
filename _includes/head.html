@@ -12,7 +12,14 @@
   {% endif %}
 
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }} {{ site.title-separator }} {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
-  <link rel="apple-touch-icon" sizes="128x128" href="apple-touch-icon.png">
+  <link rel="icon" href="{{ '/favicon.ico' | prepend: site.baseurl }}" sizes="32x32">
+  <link rel="icon" href="{{ '/favicon.svg' | prepend: site.baseurl }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | prepend: site.baseurl }}">
+  <meta name="theme-color" content="{{ site.brand-col }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;family=JetBrains+Mono:wght@500;700;800&amp;display=swap">
 
   {% include gtag.html %}
   {% include gtm_head.html %}
@@ -32,7 +39,7 @@
 
   {% if layout.common-googlefonts %}
     {% for font in layout.common-googlefonts %}
-      <link rel="stylesheet" href="//fonts.googleapis.com/css?family={{ font }}" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{ font }}" />
     {% endfor %}
   {% endif %}
 
@@ -50,7 +57,7 @@
 
   {% if page.googlefonts %}
     {% for font in page.googlefonts %}
-      <link rel="stylesheet" href="//fonts.googleapis.com/css?family={{ font }}" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{ font }}" />
     {% endfor %}
   {% endif %}
 

@@ -10,22 +10,21 @@ title: 'Tag Index'
 {%- endcapture -%}
 {%- assign tags_list = site_tags | split:',' | sort -%}
 
+<nav class="tag-index" aria-label="Tags">
 {%- for tag in tags_list -%}
-    <a href="#{{- tag -}}" class="btn btn-primary tag-btn"><i class="fa-solid fa-tag" aria-hidden="true"></i>&nbsp;{{- tag -}}&nbsp;({{site.tags[tag].size}})</a>
+    <a href="#{{- tag -}}">#{{- tag }} ({{ site.tags[tag].size }})</a>
 {%- endfor -%}
+</nav>
 
 <div id="full-tags-list">
 {%- for tag in tags_list -%}
-    <h2 id="{{- tag -}}" class="linked-section">
-        <i class="fa-solid fa-tag" aria-hidden="true"></i>
-        &nbsp;{{- tag -}}&nbsp;({{site.tags[tag].size}})
-    </h2>
+    <h2 id="{{- tag -}}">#{{- tag }} <span class="visually-hidden">({{ site.tags[tag].size }} posts)</span></h2>
     <div class="post-list">
         {%- for post in site.tags[tag] -%}
             <div class="tag-entry">
-                <a href="{{- site.url -}}{{- post.url -}}">{{- post.title -}}</a>
+                <a href="{{- site.baseurl -}}{{- post.url -}}">{{- post.title -}}</a>
                 <div class="entry-date">
-                    <time datetime="{{- post.date | date_to_xmlschema -}}">{{- post.date | date: "%B %d, %Y" -}}</time>
+                    <time datetime="{{- post.date | date_to_xmlschema -}}">{{- post.date | date: "%Y-%m-%d" -}}</time>
                 </div>
             </div>
         {%- endfor -%}

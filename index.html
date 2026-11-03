@@ -1,81 +1,69 @@
 ---
 layout: page
-title: Hi, I'm Carlo;
-subtitle:
+title: "Hi, I'm Carlo"
+subtitle: Blog posts, side projects, and apps.
 use-site-title: true
-bigimg:
-  - "/img/home/big-imgs/backlit-basketball.jpg": ""
 ---
 
-<div class="posts-list">
-  {% for post in paginator.posts %}
-  <article class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-      <h2 class="post-title">{{ post.title }}</h2>
+{% if paginator.page == 1 %}
+<section class="home-section" aria-labelledby="apps-heading">
+  <div class="section-head">
+    <h2 id="apps-heading" class="section-title">apps<span class="cursor" aria-hidden="true"></span></h2>
+    <a class="section-link" href="{{ '/apps' | prepend: site.baseurl }}">All apps →</a>
+  </div>
+  <div class="app-grid">
+    {% for app in site.data.apps %}
+      {% include app-card.html app=app %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="home-section" aria-labelledby="writing-heading">
+  <h2 id="writing-heading" class="section-title">writing<span class="cursor" aria-hidden="true"></span></h2>
+
+  <div class="posts-list">
+    {% for post in paginator.posts %}
+    <article class="post-preview">
+      <p class="post-meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time></p>
+      <h3 class="post-title"><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
 
       {% if post.subtitle %}
-      <h3 class="post-subtitle">
-        {{ post.subtitle }}
-      </h3>
+      <p class="post-subtitle">{{ post.subtitle }}</p>
       {% endif %}
-    </a>
 
-    <p class="post-meta">Posted on {{ post.date | date: "%B %-d, %Y" }}</p>
-
-    <div class="post-entry-container">
-      {% if post.image %}
-      <div class="post-image">
-        <a href="{{ post.url | prepend: site.baseurl }}">
-          <img src="{{ post.image }}" />
-        </a>
-      </div>
-      {% endif %}
-      <div class="post-entry">
-        {{
-          post.excerpt
-            | strip_html
-            | xml_escape
-            | truncatewords: site.excerpt_length
-        }}
-        {% assign excerpt_word_count = post.excerpt | number_of_words %} {% if
-        post.content != post.excerpt or excerpt_word_count > site.excerpt_length
-        %}
-        <a href="{{ post.url | prepend: site.baseurl }}" class="post-read-more"
-          >[Read&nbsp;More]</a
-        >
+      <p class="post-entry">
+        {{ post.excerpt | strip_html | truncatewords: site.excerpt_length }}
+        {% assign excerpt_word_count = post.excerpt | number_of_words %}
+        {% if post.content != post.excerpt or excerpt_word_count > site.excerpt_length %}
+        <a href="{{ post.url | prepend: site.baseurl }}" class="post-read-more">Read more<span class="visually-hidden">: {{ post.title }}</span></a>
         {% endif %}
+      </p>
+
+      {% if post.tags.size > 0 %}
+      <div class="blog-tags">
+        <span class="visually-hidden">Tags:</span>
+        {% for tag in post.tags %}
+          {% if site.link-tags %}<a href="{{ site.baseurl }}/tags#{{- tag -}}">#{{- tag -}}</a>{% else %}<span>#{{- tag -}}</span>{% endif %}
+        {% endfor %}
       </div>
-    </div>
-
-    {% if post.tags.size > 0 %}
-    <div class="blog-tags">
-      Tags: {% if site.link-tags %} {% for tag in post.tags %}
-      <a href="{{ site.baseurl }}/tags#{{- tag -}}">{{- tag -}}</a>
-      {% endfor %} {% else %}
-      {{ post.tags | join: ", " }}
       {% endif %}
-    </div>
-    {% endif %}
-  </article>
-  {% endfor %}
-</div>
+    </article>
+    {% endfor %}
+  </div>
 
-{% if paginator.total_pages > 1 %}
-<ul class="pager main-pager">
-  {% if paginator.previous_page %}
-  <li class="previous">
-    <a
-      href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}"
-      >&larr; Newer Posts</a
-    >
-  </li>
-  {% endif %} {% if paginator.next_page %}
-  <li class="next">
-    <a
-      href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}"
-      >Older Posts &rarr;</a
-    >
-  </li>
+  {% if paginator.total_pages > 1 %}
+  <ul class="pager main-pager">
+    {% if paginator.previous_page %}
+    <li class="previous">
+      <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">← Newer posts</a>
+    </li>
+    {% endif %}
+    {% if paginator.next_page %}
+    <li class="next">
+      <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older posts →</a>
+    </li>
+    {% endif %}
+  </ul>
   {% endif %}
-</ul>
-{% endif %}
+</section>
